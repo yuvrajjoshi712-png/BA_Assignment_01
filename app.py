@@ -665,6 +665,50 @@ header[data-testid="stHeader"]{ background:transparent; }
 .zw-chip.down{ background:var(--green-soft); color:var(--green); }
 
 
+/* Feature cards (landing) */
+.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:32px; padding:26px 24px 22px 24px;
+  box-shadow:var(--shadow); border:2px solid transparent; transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+.st-key-feat_ai:hover, .st-key-feat_manual:hover{ transform:translateY(-5px); box-shadow:0 18px 44px rgba(226,55,68,.20); border-color:#F6B5AE; }
+.st-key-feat_ai:has(button:focus-visible), .st-key-feat_manual:has(button:focus-visible){ border-color:var(--red); }
+.st-key-pickbig_ai, .st-key-pickbig_manual{ position:absolute !important; inset:0; z-index:5; margin:0 !important; }
+.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:32px; }
+.zw-feat-ico{ width:62px; height:62px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 20px rgba(226,55,68,.30); margin-bottom:14px; }
+.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.2rem; color:var(--ink); }
+.zw-feat-d{ color:var(--muted); font-size:0.92rem; line-height:1.5; margin:6px 0 12px 0; min-height:4.2em; }
+.zw-feat-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.zw-feat-tags span{ background:#F1EFFB; color:#5B5380; font-size:0.74rem; font-weight:700; padding:4px 12px; border-radius:999px; }
+.zw-feat-go{ display:inline-block; background:var(--grad); color:#fff; font-weight:700; font-size:0.92rem; padding:9px 20px; border-radius:999px; }
+
+/* Steps strip */
+.zw-steps{ display:flex; justify-content:center; gap:10px 22px; flex-wrap:wrap; margin:22px 0 4px 0; color:var(--muted); font-size:0.88rem; }
+.zw-steps b{ display:inline-flex; width:24px; height:24px; border-radius:50%; background:#fff; color:var(--red); align-items:center; justify-content:center; font-size:0.8rem; margin-right:8px; box-shadow:0 2px 8px rgba(34,27,46,.12); }
+
+/* Preset and follow-up chips */
+.st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
+.st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--red); color:var(--red); }
+.st-key-followups{ margin-top:6px; }
+
+/* Result card with ring */
+.zw-result{ display:flex; align-items:center; gap:24px; flex-wrap:wrap; background:#fff; border-radius:28px; padding:18px 26px; box-shadow:var(--shadow); margin:2px 0 14px 0; }
+.zw-ring{ position:relative; width:110px; height:110px; border-radius:50%; flex:none; }
+.zw-ring-in{ position:absolute; inset:12px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.zw-ring-n{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.45rem; line-height:1; color:var(--ink); }
+.zw-ring-l{ font-size:0.68rem; color:var(--muted); margin-top:3px; }
+.zw-k{ color:var(--muted); font-size:0.82rem; margin-bottom:2px; }
+.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:2.3rem; color:var(--ink); line-height:1.1; }
+.zw-v span{ font-size:1rem; font-weight:600; color:var(--muted); margin-left:4px; }
+.zw-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:0.85rem; margin-top:8px; }
+.zw-pill.zw-late{ background:var(--amber-soft); color:var(--amber); }
+.zw-pill.zw-ok{ background:var(--green-soft); color:var(--green); }
+.zw-limit{ color:var(--muted); font-size:0.8rem; margin-left:8px; }
+
+/* Driver chips */
+.zw-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 6px 0; }
+.zw-chip{ padding:6px 14px; border-radius:999px; font-size:0.86rem; font-weight:600; }
+.zw-chip.up{ background:var(--amber-soft); color:var(--amber); }
+.zw-chip.down{ background:var(--green-soft); color:var(--green); }
+
+
 /* Recommendations */
 .zw-rec{ background:#fff; border-radius:28px; padding:20px 24px 10px 24px; box-shadow:var(--shadow); margin:0 0 14px 0; border-left:8px solid var(--line); }
 .zw-rec-high{ border-left-color:var(--amber); } .zw-rec-watch{ border-left-color:#E9A23B; } .zw-rec-low{ border-left-color:var(--green); }
@@ -828,20 +872,8 @@ TAGS = {0: ("ok", "All clear"), 1: ("now", "Do now"), 2: ("maybe", "Consider")}
 
 
 def render_recommendations(rec: dict) -> None:
-    rows = "".join(
-        '<div class="zw-act">'
-        f'<div class="zw-act-ico">{a["icon"]}</div>'
-        f'<div class="zw-act-txt"><div class="zw-act-t">{html.escape(a["title"])}'
-        f'<span class="zw-tag {TAGS[a["priority"]][0]}">{TAGS[a["priority"]][1]}</span></div>'
-        f'<div class="zw-act-d">{html.escape(a["detail"])}</div></div></div>'
-        for a in rec["actions"]
-    )
-    st.markdown(
-        f'<div class="zw-rec zw-rec-{rec["tier"]}">'
-        '<div class="zw-rec-h">Recommended actions</div>'
-        f'<div class="zw-rec-s">{html.escape(rec["headline"])}</div>{rows}</div>',
-        unsafe_allow_html=True,
-    )
+    items = "\n".join(f"- **{a['title']}**: {a['detail']}" for a in rec["actions"])
+    st.markdown(f"**Recommended actions**\n\n{items}")
 
 
 def render_tiles(minutes: float, prob_pct: float, is_late: bool) -> None:
