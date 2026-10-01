@@ -620,6 +620,30 @@ header[data-testid="stHeader"]{ background:transparent; }
 .st-key-examples button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
 .st-key-examples button:hover{ border-color:var(--red); color:var(--red); }
 
+
+/* Feature cards (landing) */
+.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:32px; padding:26px 24px 22px 24px;
+  box-shadow:var(--shadow); border:2px solid transparent; transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
+.st-key-feat_ai:hover, .st-key-feat_manual:hover{ transform:translateY(-5px); box-shadow:0 18px 44px rgba(226,55,68,.20); border-color:#F6B5AE; }
+.st-key-feat_ai:has(button:focus-visible), .st-key-feat_manual:has(button:focus-visible){ border-color:var(--red); }
+.st-key-pickbig_ai, .st-key-pickbig_manual{ position:absolute !important; inset:0; z-index:5; margin:0 !important; }
+.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:32px; }
+.zw-feat-ico{ width:62px; height:62px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 20px rgba(226,55,68,.30); margin-bottom:14px; }
+.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.2rem; color:var(--ink); }
+.zw-feat-d{ color:var(--muted); font-size:0.92rem; line-height:1.5; margin:6px 0 12px 0; min-height:4.2em; }
+.zw-feat-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+.zw-feat-tags span{ background:#F1EFFB; color:#5B5380; font-size:0.74rem; font-weight:700; padding:4px 12px; border-radius:999px; }
+.zw-feat-go{ display:inline-block; background:var(--grad); color:#fff; font-weight:700; font-size:0.92rem; padding:9px 20px; border-radius:999px; }
+
+/* Steps strip */
+.zw-steps{ display:flex; justify-content:center; gap:10px 22px; flex-wrap:wrap; margin:22px 0 4px 0; color:var(--muted); font-size:0.88rem; }
+.zw-steps b{ display:inline-flex; width:24px; height:24px; border-radius:50%; background:#fff; color:var(--red); align-items:center; justify-content:center; font-size:0.8rem; margin-right:8px; box-shadow:0 2px 8px rgba(34,27,46,.12); }
+
+/* Preset and follow-up chips */
+.st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
+.st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--red); color:var(--red); }
+.st-key-followups{ margin-top:6px; }
+
 /* Result card with ring */
 .zw-result{ display:flex; align-items:center; gap:24px; flex-wrap:wrap; background:#fff; border-radius:28px; padding:18px 26px; box-shadow:var(--shadow); margin:2px 0 14px 0; }
 .zw-ring{ position:relative; width:110px; height:110px; border-radius:50%; flex:none; }
@@ -639,6 +663,21 @@ header[data-testid="stHeader"]{ background:transparent; }
 .zw-chip{ padding:6px 14px; border-radius:999px; font-size:0.86rem; font-weight:600; }
 .zw-chip.up{ background:var(--amber-soft); color:var(--amber); }
 .zw-chip.down{ background:var(--green-soft); color:var(--green); }
+
+
+/* Recommendations */
+.zw-rec{ background:#fff; border-radius:28px; padding:20px 24px 10px 24px; box-shadow:var(--shadow); margin:0 0 14px 0; border-left:8px solid var(--line); }
+.zw-rec-high{ border-left-color:var(--amber); } .zw-rec-watch{ border-left-color:#E9A23B; } .zw-rec-low{ border-left-color:var(--green); }
+.zw-rec-h{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:1.02rem; color:var(--ink); }
+.zw-rec-s{ color:var(--muted); font-size:0.9rem; margin:2px 0 12px 0; }
+.zw-act{ display:flex; gap:14px; align-items:flex-start; padding:10px 0; border-top:1px solid #F0EFF7; }
+.zw-act-ico{ width:40px; height:40px; border-radius:50%; background:var(--canvas); display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex:none; }
+.zw-act-t{ font-weight:700; font-size:0.96rem; color:var(--ink); }
+.zw-act-d{ color:var(--muted); font-size:0.88rem; margin-top:2px; line-height:1.45; }
+.zw-tag{ display:inline-block; margin-left:10px; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; vertical-align:middle; }
+.zw-tag.now{ background:var(--amber-soft); color:var(--amber); }
+.zw-tag.ok{ background:var(--green-soft); color:var(--green); }
+.zw-tag.maybe{ background:#ECEAF8; color:#5B5380; }
 
 /* Manual form groups */
 [class*="st-key-grp_"]{ background:#fff; border:none !important; border-radius:26px !important; box-shadow:var(--shadow); padding:6px 8px; }
@@ -697,6 +736,114 @@ def use_example(text: str) -> None:
     st.session_state.pending_prompt = text
 
 
+def build_recommendations(context: dict) -> dict:
+    """Rule-based manager actions. Works without any AI service."""
+    o = context["order"]
+    p = context["prediction"]
+    prob = p["late_probability_percent"]
+    minutes = p["predicted_delivery_time_minutes"]
+
+    dist = float(haversine_distance(
+        o["restaurant_latitude"], o["restaurant_longitude"],
+        o["delivery_latitude"], o["delivery_longitude"],
+    ))
+    hour = int(o["order_time"].split(":")[0])
+    peak = 12 <= hour < 14 or 18 <= hour < 22
+
+    if prob >= 60 or minutes > LATE_THRESHOLD:
+        tier, headline = "high", "Act before dispatch: this order is likely to run late."
+    elif prob >= 30 or minutes >= LATE_THRESHOLD - 6:
+        tier, headline = "watch", "Keep an eye on this one: it is close to the limit."
+    else:
+        tier, headline = "low", "Looks fine. Standard handling is enough."
+
+    acts = []  # (priority 1=do now / 2=consider, icon, title, detail)
+
+    others = int(o["multiple_deliveries"])
+    if others >= 2:
+        acts.append((1, "📦", "Lighten the rider's load",
+                     f"He is already carrying {others} other deliveries. Move one of them to a nearby rider if you can."))
+    elif others == 1 and tier != "low":
+        acts.append((2, "📦", "Check the batching",
+                     "One other drop is on this trip. Make sure this customer is not the last stop."))
+
+    if o["traffic"] in ("High", "Jam"):
+        acts.append((1, "🚦", "Plan around the traffic",
+                     "Send the rider on the clearest route and dispatch as soon as the food is nearly ready."))
+    if o["weather"] in ("Stormy", "Fog", "Sandstorms", "Windy"):
+        acts.append((1, "🌧️", "Allow extra time for the weather",
+                     f"{o['weather']} conditions slow riders down. Add a buffer to the ETA and remind the rider to ride safely."))
+
+    prep = float(o["kitchen_preparation_time_minutes"])
+    if prep >= 20:
+        acts.append((1 if tier == "high" else 2, "🍳", "Call the kitchen",
+                     f"Preparation is about {prep:.0f} minutes. Ask the restaurant to prioritise this order, "
+                     "and time the pickup so the rider is not left waiting."))
+
+    if dist >= 8:
+        acts.append((1 if tier == "high" else 2, "📍", "Long trip",
+                     f"The drop is about {dist:.1f} km away. A rider closer to the restaurant, or an honest ETA, will help."))
+
+    if float(o["rider_rating"]) < 4.0 or int(o["vehicle_condition"]) <= 1:
+        acts.append((2, "🛵", "Consider a stronger rider or vehicle",
+                     "This rider's rating or vehicle condition is on the low side for a risky delivery."))
+    if o["vehicle_type"] == "bicycle" and dist > 4:
+        acts.append((2, "🚲", "Bicycle on a longer route",
+                     f"At {dist:.1f} km a motorbike or scooter would be quicker."))
+
+    if o["festival"] == "Yes":
+        acts.append((2, "🎉", "Festival demand",
+                     "Restaurants and roads are busier on festival days. Expect pickup delays."))
+    if peak and tier != "low":
+        acts.append((2, "⏰", "Peak-hour pressure",
+                     "Order volume is high at this time of day. Keep an eye on the rider's progress."))
+
+    if tier == "high":
+        acts.append((1, "💬", "Tell the customer early",
+                     f"Send a revised ETA now rather than after the {LATE_THRESHOLD}-minute mark has passed."))
+        acts.append((2, "🎁", "Plan a goodwill gesture",
+                     "If the order does arrive late, a small credit protects the relationship."))
+    elif tier == "watch":
+        acts.append((2, "👀", "Re-check in a few minutes",
+                     "If pickup slips or traffic worsens, step in early with the actions above."))
+    else:
+        extras = len(acts)
+        acts.append((0, "✅", "No intervention needed",
+                     "Dispatch as normal and let the order run."))
+        if extras == 0:
+            acts.append((2, "📈", "Keep monitoring",
+                         "Conditions can change. Check again if the rider is held up at pickup."))
+        else:
+            headline = "Looks fine. Standard handling is enough, with a few things to keep in mind."
+
+    acts.sort(key=lambda a: a[0])
+    return {
+        "tier": tier,
+        "headline": headline,
+        "actions": [{"priority": a[0], "icon": a[1], "title": a[2], "detail": a[3]} for a in acts[:6]],
+    }
+
+
+TAGS = {0: ("ok", "All clear"), 1: ("now", "Do now"), 2: ("maybe", "Consider")}
+
+
+def render_recommendations(rec: dict) -> None:
+    rows = "".join(
+        '<div class="zw-act">'
+        f'<div class="zw-act-ico">{a["icon"]}</div>'
+        f'<div class="zw-act-txt"><div class="zw-act-t">{html.escape(a["title"])}'
+        f'<span class="zw-tag {TAGS[a["priority"]][0]}">{TAGS[a["priority"]][1]}</span></div>'
+        f'<div class="zw-act-d">{html.escape(a["detail"])}</div></div></div>'
+        for a in rec["actions"]
+    )
+    st.markdown(
+        f'<div class="zw-rec zw-rec-{rec["tier"]}">'
+        '<div class="zw-rec-h">Recommended actions</div>'
+        f'<div class="zw-rec-s">{html.escape(rec["headline"])}</div>{rows}</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def render_tiles(minutes: float, prob_pct: float, is_late: bool) -> None:
     color = "#C2410C" if is_late else "#12805C"
     cls = "zw-late" if is_late else "zw-ok"
@@ -750,30 +897,49 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<div class="zw-h">How would you like to enter the order?</div>', unsafe_allow_html=True)
-
-with st.container(key="picker"):
-    _pc1, _pc2 = st.columns(2)
-    for _col, (_key, _label) in zip(
-        (_pc1, _pc2),
-        [("ai", "💬  Describe it in words"), ("manual", "🧮  Fill in the form")],
-    ):
+if st.session_state.mode is None:
+    st.markdown('<div class="zw-h">How would you like to enter the order?</div>', unsafe_allow_html=True)
+    _feats = [
+        ("ai", "💬", "Describe it in words",
+         "Type or paste the order like a message. The AI assistant picks out the details and asks for anything missing.",
+         ["Fastest", "Uses AI"], "Start typing →"),
+        ("manual", "🧮", "Fill in the form",
+         "Pick areas, rider and conditions from simple dropdowns. Presets get you started in one tap.",
+         ["Full control", "No AI needed"], "Open the form →"),
+    ]
+    for _col, (_key, _ico, _title, _desc, _tags, _go) in zip(st.columns(2), _feats):
         with _col:
-            st.button(
-                _label,
-                key=f"pick_{_key}",
-                on_click=set_mode,
-                args=(_key,),
-                type="primary" if st.session_state.mode == _key else "secondary",
-                use_container_width=True,
-            )
-
-_mode_notes = {
-    None: f"Pick a method to begin. An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.",
-    "ai": "Type the order in plain English. The assistant picks out the details and asks for anything missing.",
-    "manual": "Enter every detail yourself. The prediction itself needs no AI.",
-}
-st.markdown(f'<div class="zw-note zw-center">{_mode_notes[st.session_state.mode]}</div>', unsafe_allow_html=True)
+            with st.container(key=f"feat_{_key}"):
+                st.markdown(
+                    f'<div class="zw-feat-ico">{_ico}</div><div class="zw-feat-t">{_title}</div>'
+                    f'<div class="zw-feat-d">{_desc}</div>'
+                    f'<div class="zw-feat-tags">{"".join(f"<span>{t}</span>" for t in _tags)}</div>'
+                    f'<div class="zw-feat-go">{_go}</div>',
+                    unsafe_allow_html=True,
+                )
+                st.button(f"Choose: {_title}", key=f"pickbig_{_key}", on_click=set_mode, args=(_key,))
+    st.markdown(
+        '<div class="zw-steps"><span><b>1</b>Enter the order</span><span><b>2</b>See the delay prediction</span>'
+        '<span><b>3</b>Get recommended actions</span></div>'
+        f'<div class="zw-note zw-center">An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.</div>',
+        unsafe_allow_html=True,
+    )
+else:
+    with st.container(key="picker"):
+        _pc1, _pc2 = st.columns(2)
+        for _col, (_key, _label) in zip(
+            (_pc1, _pc2),
+            [("ai", "💬  Describe it in words"), ("manual", "🧮  Fill in the form")],
+        ):
+            with _col:
+                st.button(
+                    _label,
+                    key=f"pick_{_key}",
+                    on_click=set_mode,
+                    args=(_key,),
+                    type="primary" if st.session_state.mode == _key else "secondary",
+                    use_container_width=True,
+                )
 
 
 # =============================================================================
@@ -786,6 +952,13 @@ EXAMPLE_ORDERS = [
     "Rider is 24, rated 4.2, scooter in average condition, no other deliveries. Clear weather, low traffic, "
     "snack order, prep time 10 minutes. Restaurant 12.9716, 77.5946, customer 12.9850, 77.6100. "
     "Metropolitan city, not a festival day.",
+]
+
+
+FOLLOWUPS = [
+    ("Why is it risky?", "Why is this order risky? Explain the main reasons briefly."),
+    ("What first?", "What is the single most important thing the manager should do first?"),
+    ("Message customer", "Write a short, polite message to the customer about this delivery."),
 ]
 
 
@@ -841,8 +1014,10 @@ def process_chat_message(chat_text: str, history: List[Dict[str, str]]) -> Tuple
         st.error(msg)
         return msg, None
 
-    result = {"minutes": predicted_minutes, "prob": late_proba * 100, "late": bool(is_late)}
+    rec = build_recommendations(context)
+    result = {"minutes": predicted_minutes, "prob": late_proba * 100, "late": bool(is_late), "rec": rec}
     render_tiles(result["minutes"], result["prob"], result["late"])
+    render_recommendations(rec)
 
     with st.spinner("Writing manager advice..."):
         insights, insight_error = generate_manager_insights(context)
@@ -891,6 +1066,8 @@ def render_ai_mode() -> None:
             if m.get("result"):
                 r = m["result"]
                 render_tiles(r["minutes"], r["prob"], r["late"])
+                if r.get("rec"):
+                    render_recommendations(r["rec"])
             if m.get("content"):
                 st.markdown(m["content"])
 
@@ -903,67 +1080,203 @@ def render_ai_mode() -> None:
             answer, result = process_chat_message(prompt, history)
         messages.append({"role": "assistant", "content": answer, "result": result})
 
+    if st.session_state.last_context and st.session_state.chat_messages:
+        with st.container(key="followups"):
+            st.caption("Ask a follow-up:")
+            fcols = st.columns(3)
+            for i, (col, (label, text)) in enumerate(zip(fcols, FOLLOWUPS)):
+                with col:
+                    st.button(label, key=f"fu_{i}", on_click=use_example, args=(text,), use_container_width=True)
+
 
 # =============================================================================
 # MODE 2 — MANUAL FORM
 # =============================================================================
+AREAS = {
+    "MG Road": (12.9756, 77.6068),
+    "Indiranagar": (12.9784, 77.6408),
+    "Koramangala": (12.9352, 77.6245),
+    "HSR Layout": (12.9116, 77.6474),
+    "Jayanagar": (12.9250, 77.5938),
+    "Whitefield": (12.9698, 77.7500),
+    "Electronic City": (12.8452, 77.6602),
+    "Hebbal": (13.0358, 77.5970),
+    "Malleshwaram": (13.0031, 77.5643),
+    "Yelahanka": (13.1007, 77.5963),
+}
+CUSTOM_AREA = "Custom location"
+AREA_OPTIONS = list(AREAS) + [CUSTOM_AREA]
+
+FORM_DEFAULTS = {
+    "f_date": None,  # filled with today's date at reset time
+    "f_time": dt.time(19, 0),
+    "f_prep": 15.0, "f_multi": 1,
+    "f_rest_area": "MG Road", "f_cust_area": "Hebbal",
+    "f_age": 30, "f_vehicle": "motorcycle ", "f_rating": 4.7, "f_vcond": 1,
+    "f_weather": "Sunny", "f_traffic": "Medium", "f_city": "Metropolitian",
+    "f_otype": "Snack ", "f_festival": "No",
+}
+
+PRESETS = {
+    "🌧️ Rainy rush": {
+        "f_time": dt.time(19, 30), "f_prep": 20.0, "f_multi": 2,
+        "f_rest_area": "MG Road", "f_cust_area": "Whitefield",
+        "f_age": 30, "f_vehicle": "motorcycle ", "f_rating": 4.8, "f_vcond": 2,
+        "f_weather": "Stormy", "f_traffic": "High", "f_city": "Metropolitian",
+        "f_otype": "Meal ", "f_festival": "No",
+    },
+    "☀️ Calm afternoon": {
+        "f_time": dt.time(15, 0), "f_prep": 10.0, "f_multi": 0,
+        "f_rest_area": "Indiranagar", "f_cust_area": "Koramangala",
+        "f_age": 26, "f_vehicle": "scooter ", "f_rating": 4.6, "f_vcond": 3,
+        "f_weather": "Sunny", "f_traffic": "Low", "f_city": "Metropolitian",
+        "f_otype": "Snack ", "f_festival": "No",
+    },
+    "🎉 Festival night": {
+        "f_time": dt.time(20, 30), "f_prep": 25.0, "f_multi": 3,
+        "f_rest_area": "Jayanagar", "f_cust_area": "Hebbal",
+        "f_age": 24, "f_vehicle": "motorcycle ", "f_rating": 4.3, "f_vcond": 1,
+        "f_weather": "Cloudy", "f_traffic": "Jam", "f_city": "Urban",
+        "f_otype": "Buffet ", "f_festival": "Yes",
+    },
+}
+
+
+def _sync_coords(which: str) -> None:
+    area = st.session_state[f"f_{which}_area"]
+    if area in AREAS:
+        st.session_state[f"f_{which}_lat"], st.session_state[f"f_{which}_lon"] = AREAS[area]
+
+
+def reset_form() -> None:
+    for k, v in FORM_DEFAULTS.items():
+        st.session_state[k] = v
+    st.session_state["f_date"] = dt.date.today()
+    _sync_coords("rest")
+    _sync_coords("cust")
+
+
+def apply_preset(name: str) -> None:
+    for k, v in PRESETS[name].items():
+        st.session_state[k] = v
+    _sync_coords("rest")
+    _sync_coords("cust")
+
+
+def on_area_change(which: str) -> None:
+    _sync_coords(which)
+
+
+def on_coord_change(which: str) -> None:
+    st.session_state[f"f_{which}_area"] = CUSTOM_AREA
+
+
+def build_summary_text(context: dict, rec: dict) -> str:
+    p, o = context["prediction"], context["order"]
+    lines = [
+        "Zwigato delivery check",
+        "=" * 24,
+        f"Predicted delivery time: {p['predicted_delivery_time_minutes']:.0f} min (limit {LATE_THRESHOLD} min)",
+        f"Chance of being late: {p['late_probability_percent']:.0f}%",
+        f"Verdict: {p['classification'].title()}",
+        "",
+        rec["headline"],
+        "",
+        "Recommended actions:",
+    ]
+    for a in rec["actions"]:
+        lines.append(f"- [{TAGS[a['priority']][1]}] {a['title']}: {a['detail']}")
+    lines += [
+        "",
+        "Order details:",
+        f"- Date and time: {o['order_date']} {o['order_time']}",
+        f"- Kitchen prep: {o['kitchen_preparation_time_minutes']:.0f} min; other deliveries: {o['multiple_deliveries']}",
+        f"- Rider: age {o['rider_age']}, rating {o['rider_rating']}, {o['vehicle_type']} (condition {o['vehicle_condition']}/3)",
+        f"- Conditions: weather {o['weather']}, traffic {o['traffic']}, {o['order_type']} order, festival {o['festival']}",
+    ]
+    return "\n".join(lines)
+
+
 def render_manual_mode() -> None:
+    if "f_prep" not in st.session_state:
+        reset_form()
+
     st.markdown('<div class="zw-h">Order details</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="zw-note" style="margin-top:-0.3rem">Start from a typical scenario, then change anything you like.</div>',
+        unsafe_allow_html=True,
+    )
+    with st.container(key="presets"):
+        pcols = st.columns(4)
+        for col, name in zip(pcols, PRESETS):
+            with col:
+                st.button(name, key=f"preset_{name}", on_click=apply_preset, args=(name,), use_container_width=True)
+        with pcols[3]:
+            st.button("↺ Reset", key="reset_form_btn", on_click=reset_form, use_container_width=True)
 
-    with st.form("order_form", border=False):
-        with st.container(border=True, key="grp_order"):
-            st.markdown('<div class="zw-grp">Order</div>', unsafe_allow_html=True)
-            c1, c2 = st.columns(2)
-            with c1:
-                order_date = st.date_input("Order date", value=dt.date.today())
-                order_time = st.time_input("Order time", value=dt.time(19, 0))
-            with c2:
-                prep_time = st.number_input(
-                    "Kitchen preparation time (minutes)",
-                    min_value=0.0, max_value=60.0, value=15.0, step=1.0,
-                    help="Expected time between the order being placed and the rider picking it up.",
-                )
-                multiple_deliveries = st.selectbox("Other deliveries on this trip", [0, 1, 2, 3], index=1)
+    with st.container(border=True, key="grp_order"):
+        st.markdown('<div class="zw-grp">Order</div>', unsafe_allow_html=True)
+        c1, c2 = st.columns(2)
+        with c1:
+            order_date = st.date_input("Order date", key="f_date")
+            order_time = st.time_input("Order time", key="f_time")
+        with c2:
+            prep_time = st.number_input(
+                "Kitchen preparation time (minutes)", min_value=0.0, max_value=60.0, step=1.0, key="f_prep",
+                help="Expected time between the order being placed and the rider picking it up.",
+            )
+            multiple_deliveries = st.selectbox("Other deliveries on this trip", [0, 1, 2, 3], key="f_multi")
 
-        with st.container(border=True, key="grp_locations"):
-            st.markdown('<div class="zw-grp">Locations</div>', unsafe_allow_html=True)
-            c3, c4 = st.columns(2)
-            with c3:
-                restaurant_lat = st.number_input("Restaurant latitude", value=12.9716, format="%.6f")
-                restaurant_lon = st.number_input("Restaurant longitude", value=77.5946, format="%.6f")
-            with c4:
-                delivery_lat = st.number_input("Customer latitude", value=13.0500, format="%.6f")
-                delivery_lon = st.number_input("Customer longitude", value=77.6500, format="%.6f")
+    with st.container(border=True, key="grp_locations"):
+        st.markdown('<div class="zw-grp">Locations</div>', unsafe_allow_html=True)
+        c3, c4 = st.columns(2)
+        with c3:
+            st.selectbox("Restaurant area", AREA_OPTIONS, key="f_rest_area", on_change=on_area_change, args=("rest",))
+        with c4:
+            st.selectbox("Customer area", AREA_OPTIONS, key="f_cust_area", on_change=on_area_change, args=("cust",))
+        with st.expander("Exact coordinates (optional)"):
+            e1, e2 = st.columns(2)
+            with e1:
+                restaurant_lat = st.number_input("Restaurant latitude", format="%.6f", key="f_rest_lat",
+                                                 on_change=on_coord_change, args=("rest",))
+                restaurant_lon = st.number_input("Restaurant longitude", format="%.6f", key="f_rest_lon",
+                                                 on_change=on_coord_change, args=("rest",))
+            with e2:
+                delivery_lat = st.number_input("Customer latitude", format="%.6f", key="f_cust_lat",
+                                               on_change=on_coord_change, args=("cust",))
+                delivery_lon = st.number_input("Customer longitude", format="%.6f", key="f_cust_lon",
+                                               on_change=on_coord_change, args=("cust",))
+        _km = float(haversine_distance(restaurant_lat, restaurant_lon, delivery_lat, delivery_lon))
+        st.caption(f"Straight-line distance: about {_km:.1f} km. Areas are approximate Bengaluru centres; "
+                   "use exact coordinates for anywhere else.")
 
-        with st.container(border=True, key="grp_rider"):
-            st.markdown('<div class="zw-grp">Rider and vehicle</div>', unsafe_allow_html=True)
-            c5, c6, c7 = st.columns(3)
-            with c5:
-                age = st.number_input("Rider age", min_value=15, max_value=50, value=30)
-                vehicle_type = st.selectbox(
-                    "Vehicle type", ["motorcycle ", "scooter ", "electric_scooter ", "bicycle "],
-                    index=0, format_func=lambda v: v.strip().replace("_", " "),
-                )
-            with c6:
-                ratings = st.number_input("Rider rating", min_value=1.0, max_value=6.0, value=4.7, step=0.1)
-            with c7:
-                vehicle_condition = st.selectbox("Vehicle condition (0 = poor, 3 = best)", [0, 1, 2, 3], index=1)
+    with st.container(border=True, key="grp_rider"):
+        st.markdown('<div class="zw-grp">Rider and vehicle</div>', unsafe_allow_html=True)
+        c5, c6, c7 = st.columns(3)
+        with c5:
+            age = st.number_input("Rider age", min_value=15, max_value=50, key="f_age")
+            vehicle_type = st.selectbox(
+                "Vehicle type", ["motorcycle ", "scooter ", "electric_scooter ", "bicycle "], key="f_vehicle",
+                format_func=lambda v: v.strip().replace("_", " "),
+            )
+        with c6:
+            ratings = st.number_input("Rider rating", min_value=1.0, max_value=6.0, step=0.1, key="f_rating")
+        with c7:
+            vehicle_condition = st.selectbox("Vehicle condition (0 = poor, 3 = best)", [0, 1, 2, 3], key="f_vcond")
 
-        with st.container(border=True, key="grp_conditions"):
-            st.markdown('<div class="zw-grp">Conditions</div>', unsafe_allow_html=True)
-            c8, c9 = st.columns(2)
-            with c8:
-                weather = st.selectbox(
-                    "Weather", ["Sunny", "Cloudy", "Fog", "Sandstorms", "Stormy", "Windy", "NaN"], index=0)
-                traffic = st.selectbox("Road traffic density", ["Low", "Medium", "High", "Jam"], index=1)
-                city = st.selectbox("City type", ["Urban", "Metropolitian", "Semi-Urban"], index=1)
-            with c9:
-                order_type = st.selectbox(
-                    "Type of order", ["Snack ", "Meal ", "Drinks ", "Buffet "], index=0,
-                    format_func=lambda v: v.strip())
-                festival = st.selectbox("Festival day", ["No", "Yes"], index=0)
+    with st.container(border=True, key="grp_conditions"):
+        st.markdown('<div class="zw-grp">Conditions</div>', unsafe_allow_html=True)
+        c8, c9 = st.columns(2)
+        with c8:
+            weather = st.selectbox("Weather", ["Sunny", "Cloudy", "Fog", "Sandstorms", "Stormy", "Windy", "NaN"], key="f_weather")
+            traffic = st.selectbox("Road traffic density", ["Low", "Medium", "High", "Jam"], key="f_traffic")
+            city = st.selectbox("City type", ["Urban", "Metropolitian", "Semi-Urban"], key="f_city")
+        with c9:
+            order_type = st.selectbox("Type of order", ["Snack ", "Meal ", "Drinks ", "Buffet "], key="f_otype",
+                                      format_func=lambda v: v.strip())
+            festival = st.selectbox("Festival day", ["No", "Yes"], key="f_festival")
 
-        submitted = st.form_submit_button("Predict delivery outcome", type="primary", use_container_width=True)
+    submitted = st.button("Predict delivery outcome", key="predict_btn", type="primary", use_container_width=True)
 
     if submitted:
         order = {
@@ -1012,12 +1325,17 @@ def render_manual_mode() -> None:
             "insights": insights,
             "ai_error": ai_error,
             "has_key": bool(OPENROUTER_API_KEY),
+            "rec": build_recommendations(context),
+            "summary": build_summary_text(context, build_recommendations(context)),
         }
 
     res = st.session_state.manual_result
     if res:
         st.markdown('<div class="zw-h">Result</div>', unsafe_allow_html=True)
         render_tiles(res["minutes"], res["prob"], res["late"])
+        render_recommendations(res["rec"])
+        st.download_button("⬇  Download summary", data=res["summary"], file_name="zwigato_order_summary.txt",
+                           mime="text/plain", key="dl_summary")
         st.markdown('<div class="zw-h">What is driving this prediction</div>', unsafe_allow_html=True)
         if res["drivers"]:
             chips = "".join(
@@ -1033,7 +1351,7 @@ def render_manual_mode() -> None:
         with st.expander("See the exact values sent to the models"):
             st.dataframe(res["features"])
 
-        st.markdown('<div class="zw-h">Advice for the manager</div>', unsafe_allow_html=True)
+        st.markdown('<div class="zw-h">AI note for the manager</div>', unsafe_allow_html=True)
         if not res["has_key"]:
             st.info("Add an OPENROUTER_API_KEY in Streamlit Secrets to get written advice with each prediction.")
         elif res["ai_error"]:
