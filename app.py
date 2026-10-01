@@ -16,6 +16,7 @@ Model files expected alongside this script:
 """
 
 import datetime as dt
+import html
 import json
 import time
 import os
@@ -574,52 +575,89 @@ st.markdown(
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap');
 :root{
-  --ink:#1B1F2A; --muted:#667085; --line:#E4E7EC; --canvas:#F6F7F9; --card:#FFFFFF;
-  --red:#E23744; --red-soft:#FFF1F2; --green:#157F54; --green-soft:#E8F6EF; --amber:#B54708; --amber-soft:#FEF0E3;
+  --ink:#221B2E; --muted:#6B6580; --line:#E3E2F0; --canvas:#F4F5FB; --card:#FFFFFF;
+  --red:#E23744; --orange:#FF7A3D; --grad:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%);
+  --green:#12805C; --green-soft:#E3F5EC; --amber:#C2410C; --amber-soft:#FFEBDD;
+  --shadow:0 8px 30px rgba(34,27,46,.08);
 }
-.stApp{ background:var(--canvas); font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif; color:var(--ink); }
-.block-container{ max-width:820px; padding-top:2.2rem; padding-bottom:6rem; }
+.stApp{
+  background:
+    radial-gradient(760px 380px at 100% -8%, #FFE3DC 0%, transparent 62%),
+    radial-gradient(680px 380px at -10% 18%, #E6E4FF 0%, transparent 60%),
+    var(--canvas);
+  font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif; color:var(--ink);
+}
+header[data-testid="stHeader"]{ background:transparent; }
+.block-container{ max-width:820px; padding-top:5rem !important; padding-bottom:7rem; }
 #MainMenu, footer{ visibility:hidden; }
 
-/* Header */
-.zw-hero{ display:flex; gap:16px; align-items:center; margin-bottom:1.6rem; }
-.zw-logo{ width:52px; height:52px; border-radius:14px; background:var(--red); display:flex; align-items:center; justify-content:center; font-size:28px; flex:none; }
-.zw-title{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.65rem; line-height:1.2; color:var(--ink); letter-spacing:-0.02em; }
-.zw-sub{ color:var(--muted); font-size:0.95rem; margin-top:4px; }
+/* Hero banner */
+.zw-hero{ position:relative; overflow:hidden; display:flex; gap:18px; align-items:center;
+  padding:26px 30px; border-radius:36px; background:var(--grad); color:#fff; margin-bottom:1.6rem;
+  box-shadow:0 14px 34px rgba(226,55,68,.28); }
+.zw-hero::before{ content:""; position:absolute; right:-50px; top:-70px; width:230px; height:230px; border-radius:50%; background:rgba(255,255,255,.14); }
+.zw-hero::after{ content:""; position:absolute; right:110px; bottom:-80px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,.10); }
+.zw-hero > *{ position:relative; z-index:1; }
+.zw-logo{ width:60px; height:60px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:30px; flex:none; box-shadow:0 6px 16px rgba(0,0,0,.15); }
+.zw-title{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.7rem; line-height:1.2; color:#fff; letter-spacing:-0.02em; }
+.zw-sub{ color:rgba(255,255,255,.9); font-size:0.97rem; margin-top:5px; }
 
-/* Section headings */
-.zw-h{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:1.05rem; color:var(--ink); margin:1.4rem 0 0.6rem 0; }
-.zw-note{ color:var(--muted); font-size:0.9rem; margin:-0.3rem 0 0.8rem 0; }
+/* Headings and notes */
+.zw-h{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:1.05rem; color:var(--ink); margin:1.5rem 0 0.7rem 0; }
+.zw-note{ color:var(--muted); font-size:0.92rem; margin:0.8rem 0 0.4rem 0; }
+.zw-center{ text-align:center; }
 
-/* Method cards */
-[class*="st-key-card_"]{ background:var(--card); border:1.5px solid var(--line) !important; border-radius:16px !important; padding:6px 6px 2px 6px; }
-[class*="st-key-card_"][class*="_on"]{ border:2px solid var(--red) !important; background:var(--red-soft); }
-.zw-card-icon{ font-size:1.6rem; margin-bottom:2px; }
-.zw-card-title{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:1.02rem; color:var(--ink); }
-.zw-card-desc{ color:var(--muted); font-size:0.88rem; margin:4px 0 10px 0; min-height:2.6em; }
+/* Pill-shaped method switch */
+.st-key-picker{ background:#fff; border-radius:999px; padding:6px; box-shadow:var(--shadow); }
+.st-key-picker [data-testid="stHorizontalBlock"]{ gap:6px; }
+.st-key-picker button{ height:3.1rem; border:none; font-weight:700; }
+.st-key-picker button p{ color:inherit !important; font-size:1rem; }
+.st-key-picker button[data-testid="stBaseButton-secondary"]{ background:transparent; color:var(--muted); box-shadow:none; }
+.st-key-picker button[data-testid="stBaseButton-secondary"]:hover{ background:var(--canvas); color:var(--ink); }
+.st-key-picker button[data-testid="stBaseButton-primary"]{ background:var(--grad); color:#fff; box-shadow:0 6px 16px rgba(226,55,68,.35); }
 
-/* Result tiles */
-.zw-tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:2px 0 14px 0; }
-.zw-tile{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
-.zw-k{ color:var(--muted); font-size:0.78rem; margin-bottom:4px; }
-.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.7rem; color:var(--ink); line-height:1.1; }
-.zw-v span{ font-size:0.9rem; font-weight:600; color:var(--muted); margin-left:2px; }
-.zw-v.zw-status{ font-size:1.15rem; padding-top:6px; }
-.zw-tile.zw-late{ background:var(--amber-soft); border-color:#F4C79B; }
-.zw-tile.zw-late .zw-v{ color:var(--amber); }
-.zw-tile.zw-ok{ background:var(--green-soft); border-color:#A9DCC4; }
-.zw-tile.zw-ok .zw-v{ color:var(--green); }
-@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.35rem; } }
+/* Example chips */
+.st-key-examples button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
+.st-key-examples button:hover{ border-color:var(--red); color:var(--red); }
+
+/* Result card with ring */
+.zw-result{ display:flex; align-items:center; gap:24px; flex-wrap:wrap; background:#fff; border-radius:28px; padding:18px 26px; box-shadow:var(--shadow); margin:2px 0 14px 0; }
+.zw-ring{ position:relative; width:110px; height:110px; border-radius:50%; flex:none; }
+.zw-ring-in{ position:absolute; inset:12px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.zw-ring-n{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.45rem; line-height:1; color:var(--ink); }
+.zw-ring-l{ font-size:0.68rem; color:var(--muted); margin-top:3px; }
+.zw-k{ color:var(--muted); font-size:0.82rem; margin-bottom:2px; }
+.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:2.3rem; color:var(--ink); line-height:1.1; }
+.zw-v span{ font-size:1rem; font-weight:600; color:var(--muted); margin-left:4px; }
+.zw-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:0.85rem; margin-top:8px; }
+.zw-pill.zw-late{ background:var(--amber-soft); color:var(--amber); }
+.zw-pill.zw-ok{ background:var(--green-soft); color:var(--green); }
+.zw-limit{ color:var(--muted); font-size:0.8rem; margin-left:8px; }
+
+/* Driver chips */
+.zw-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 6px 0; }
+.zw-chip{ padding:6px 14px; border-radius:999px; font-size:0.86rem; font-weight:600; }
+.zw-chip.up{ background:var(--amber-soft); color:var(--amber); }
+.zw-chip.down{ background:var(--green-soft); color:var(--green); }
 
 /* Manual form groups */
-[class*="st-key-grp_"]{ background:var(--card); border:1px solid var(--line) !important; border-radius:14px !important; }
-.zw-grp{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:0.95rem; margin-bottom:2px; color:var(--ink); }
+[class*="st-key-grp_"]{ background:#fff; border:none !important; border-radius:26px !important; box-shadow:var(--shadow); padding:6px 8px; }
+.zw-grp{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:0.97rem; margin-bottom:4px; color:var(--ink); }
+
+/* Chat */
+[data-testid="stChatMessage"]{ background:#fff; border-radius:26px; box-shadow:var(--shadow); padding:16px 20px; margin-bottom:12px; }
+[data-testid="stChatMessageAvatarUser"], [data-testid="stChatMessageAvatarAssistant"]{ border-radius:50% !important; }
+[data-testid="stChatInput"]{ border-radius:999px; box-shadow:var(--shadow); }
 
 /* Buttons */
-.stButton > button, [data-testid="stFormSubmitButton"] > button{ border-radius:10px; font-weight:600; }
-button[data-testid="stBaseButton-primary"], button[data-testid="stBaseButton-primaryFormSubmit"]{ background:var(--red); border-color:var(--red); }
-button[data-testid="stBaseButton-primary"]:hover, button[data-testid="stBaseButton-primaryFormSubmit"]:hover{ background:#C42B38; border-color:#C42B38; }
-:focus-visible{ outline:2px solid var(--red) !important; outline-offset:2px; }
+.stButton > button, [data-testid="stFormSubmitButton"] > button{ font-weight:600; }
+button[data-testid="stBaseButton-primary"], button[data-testid="stBaseButton-primaryFormSubmit"]{ background:var(--grad); border:none; color:#fff; }
+button[data-testid="stBaseButton-primary"]:hover, button[data-testid="stBaseButton-primaryFormSubmit"]:hover{ filter:brightness(1.06); }
+button:focus-visible, a:focus-visible{ outline:2px solid var(--red) !important; outline-offset:2px; }
+textarea:focus-visible, input:focus-visible{ outline:none !important; }
+
+.zw-foot{ text-align:center; color:var(--muted); font-size:0.78rem; margin-top:2.4rem; }
+@media (max-width:640px){ .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } .zw-result{ gap:16px; } }
 </style>
 """,
     unsafe_allow_html=True,
@@ -660,16 +698,19 @@ def use_example(text: str) -> None:
 
 
 def render_tiles(minutes: float, prob_pct: float, is_late: bool) -> None:
+    color = "#C2410C" if is_late else "#12805C"
     cls = "zw-late" if is_late else "zw-ok"
     status = "Likely late" if is_late else "Likely on time"
+    pct = max(0.0, min(100.0, prob_pct))
     st.markdown(
-        '<div class="zw-tiles">'
-        f'<div class="zw-tile"><div class="zw-k">Predicted delivery time</div>'
-        f'<div class="zw-v">{minutes:.0f}<span>min</span></div></div>'
-        f'<div class="zw-tile"><div class="zw-k">Chance of being late</div>'
-        f'<div class="zw-v">{prob_pct:.0f}<span>%</span></div></div>'
-        f'<div class="zw-tile {cls}"><div class="zw-k">Verdict (limit {LATE_THRESHOLD} min)</div>'
-        f'<div class="zw-v zw-status">{status}</div></div>'
+        '<div class="zw-result">'
+        f'<div class="zw-ring" style="background:conic-gradient({color} {pct:.1f}%, #ECEAF5 0)">'
+        f'<div class="zw-ring-in"><div class="zw-ring-n">{prob_pct:.0f}%</div>'
+        '<div class="zw-ring-l">late risk</div></div></div>'
+        '<div><div class="zw-k">Predicted delivery time</div>'
+        f'<div class="zw-v">{minutes:.0f}<span>min</span></div>'
+        f'<span class="zw-pill {cls}">{status}</span>'
+        f'<span class="zw-limit">limit {LATE_THRESHOLD} min</span></div>'
         "</div>",
         unsafe_allow_html=True,
     )
@@ -711,38 +752,28 @@ st.markdown(
 
 st.markdown('<div class="zw-h">How would you like to enter the order?</div>', unsafe_allow_html=True)
 
-_methods = [
-    ("ai", "💬", "Describe it in words",
-     "Type the order in plain English. The AI assistant picks out the details and asks for anything missing."),
-    ("manual", "🧮", "Fill in the form",
-     "Enter every detail yourself for full control. The prediction itself needs no AI."),
-]
-_cols = st.columns(2)
-for _col, (_key, _icon, _title, _desc) in zip(_cols, _methods):
-    _selected = st.session_state.mode == _key
-    with _col:
-        with st.container(border=True, key=f"card_{_key}_{'on' if _selected else 'off'}"):
-            st.markdown(
-                f'<div class="zw-card-icon">{_icon}</div>'
-                f'<div class="zw-card-title">{_title}</div>'
-                f'<div class="zw-card-desc">{_desc}</div>',
-                unsafe_allow_html=True,
-            )
+with st.container(key="picker"):
+    _pc1, _pc2 = st.columns(2)
+    for _col, (_key, _label) in zip(
+        (_pc1, _pc2),
+        [("ai", "💬  Describe it in words"), ("manual", "🧮  Fill in the form")],
+    ):
+        with _col:
             st.button(
-                "Selected" if _selected else "Choose this",
+                _label,
                 key=f"pick_{_key}",
                 on_click=set_mode,
                 args=(_key,),
-                type="primary" if _selected else "secondary",
+                type="primary" if st.session_state.mode == _key else "secondary",
                 use_container_width=True,
             )
 
-if st.session_state.mode is None:
-    st.markdown(
-        f'<div class="zw-note" style="margin-top:1.2rem">Pick a method above to begin. '
-        f'An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.</div>',
-        unsafe_allow_html=True,
-    )
+_mode_notes = {
+    None: f"Pick a method to begin. An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.",
+    "ai": "Type the order in plain English. The assistant picks out the details and asks for anything missing.",
+    "manual": "Enter every detail yourself. The prediction itself needs no AI.",
+}
+st.markdown(f'<div class="zw-note zw-center">{_mode_notes[st.session_state.mode]}</div>', unsafe_allow_html=True)
 
 
 # =============================================================================
@@ -837,18 +868,17 @@ def render_ai_mode() -> None:
     messages = st.session_state.chat_messages
 
     if not messages and not prompt:
-        st.markdown('<div class="zw-h">Describe the order</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="zw-note">Mention the rider (age, rating), vehicle, traffic, weather, kitchen time, '
-            "and where the restaurant and customer are. If something is missing, the assistant will ask. "
-            "Type below, or try an example:</div>",
+            '<div class="zw-note zw-center">Mention the rider (age, rating), vehicle, traffic, weather, kitchen time '
+            "and where the restaurant and customer are. Type below, or try an example:</div>",
             unsafe_allow_html=True,
         )
-        ex_cols = st.columns(2)
-        for i, (col, label) in enumerate(zip(ex_cols, ["Rainy evening rush", "Calm afternoon"])):
-            with col:
-                st.button(label, key=f"ex_{i}", on_click=use_example, args=(EXAMPLE_ORDERS[i],),
-                          use_container_width=True)
+        with st.container(key="examples"):
+            ex_cols = st.columns(2)
+            for i, (col, label) in enumerate(zip(ex_cols, ["🌧️  Rainy evening rush", "☀️  Calm afternoon"])):
+                with col:
+                    st.button(label, key=f"ex_{i}", on_click=use_example, args=(EXAMPLE_ORDERS[i],),
+                              use_container_width=True)
     else:
         top_l, top_r = st.columns([4, 1])
         with top_l:
@@ -988,23 +1018,15 @@ def render_manual_mode() -> None:
     if res:
         st.markdown('<div class="zw-h">Result</div>', unsafe_allow_html=True)
         render_tiles(res["minutes"], res["prob"], res["late"])
-        if res["late"]:
-            st.warning(
-                f"Flagged as likely late: predicted delivery time is {res['minutes']:.0f} minutes "
-                f"against the {LATE_THRESHOLD}-minute limit."
-            )
-        else:
-            st.success(
-                f"Flagged as likely on time: predicted delivery time is {res['minutes']:.0f} minutes "
-                f"against the {LATE_THRESHOLD}-minute limit."
-            )
-
         st.markdown('<div class="zw-h">What is driving this prediction</div>', unsafe_allow_html=True)
         if res["drivers"]:
-            st.table(pd.DataFrame(res["drivers"], columns=["Factor", "Effect on late risk"]))
-            st.caption(
-                "The active inputs with the largest push, up or down, on the late-delivery score."
+            chips = "".join(
+                f'<span class="zw-chip {"up" if eff == "Increases risk" else "down"}">'
+                f'{"▲" if eff == "Increases risk" else "▼"} {html.escape(str(name).replace("_", " ").capitalize())}</span>'
+                for name, eff in res["drivers"]
             )
+            st.markdown(f'<div class="zw-chips">{chips}</div>', unsafe_allow_html=True)
+            st.caption("▲ pushes the late-delivery risk up, ▼ pushes it down. Biggest effects first.")
         else:
             st.caption("No single input stands out strongly for this order.")
 
@@ -1028,9 +1050,9 @@ if st.session_state.mode == "ai":
 elif st.session_state.mode == "manual":
     render_manual_mode()
 
-st.divider()
-st.caption(
-    "Linear regression estimates delivery minutes; logistic regression estimates the chance of a late delivery, "
-    f"defined as delivery taking more than {LATE_THRESHOLD} minutes (a business rule for this case study, not a fixed SLA). "
-    "The ML models make the prediction; the AI layer only explains it."
+st.markdown(
+    '<div class="zw-foot">Linear regression estimates delivery minutes; logistic regression estimates the chance of '
+    f"a late delivery, defined as taking more than {LATE_THRESHOLD} minutes (a business rule for this case study, not a fixed SLA). "
+    "The ML models make the prediction; the AI layer only explains it.</div>",
+    unsafe_allow_html=True,
 )
