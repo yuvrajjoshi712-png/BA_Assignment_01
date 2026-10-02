@@ -617,16 +617,21 @@ header[data-testid="stHeader"]{ background:transparent; }
 .st-key-picker button[data-testid="stBaseButton-primary"]{ background:var(--grad); color:#fff; box-shadow:0 6px 16px rgba(226,55,68,.35); }
 
 /* Landing cards - compact, whole card clickable */
-.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:20px; padding:14px 16px;
-  box-shadow:0 2px 10px rgba(34,27,46,.06); border:1.5px solid var(--line); transition:border-color .15s ease, box-shadow .15s ease; }
-.st-key-feat_ai:hover, .st-key-feat_manual:hover{ border-color:var(--red); box-shadow:0 6px 18px rgba(226,55,68,.14); }
+.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:22px; padding:0 !important; gap:0 !important;
+  box-shadow:0 4px 16px rgba(34,27,46,.07); border:1.5px solid var(--line); min-height:84px;
+  transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease; }
+.st-key-feat_ai:hover, .st-key-feat_manual:hover{ border-color:var(--red); box-shadow:0 8px 22px rgba(226,55,68,.16); transform:translateY(-2px); }
 .st-key-feat_ai:has(button:focus-visible), .st-key-feat_manual:has(button:focus-visible){ border-color:var(--red); }
+[class*="st-key-feat_"] [data-testid="stMarkdownContainer"], [class*="st-key-feat_"] [data-testid="stElementContainer"]{ margin:0 !important; }
 .st-key-pickbig_ai, .st-key-pickbig_manual{ position:absolute !important; inset:0; z-index:5; margin:0 !important; }
-.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:20px; }
-.zw-feat{ display:flex; align-items:center; gap:12px; }
-.zw-feat-ico{ width:42px; height:42px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:20px; flex:none; }
-.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:0.98rem; color:var(--ink); line-height:1.25; }
-.zw-feat-d{ color:var(--muted); font-size:0.82rem; line-height:1.35; margin-top:2px; }
+.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:22px; }
+.zw-feat{ display:flex; align-items:center; gap:14px; padding:18px 20px; }
+.zw-feat-ico{ width:46px; height:46px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:21px; flex:none; box-shadow:0 6px 14px rgba(226,55,68,.28); }
+.zw-feat-txt{ flex:1; min-width:0; }
+.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1rem; color:var(--ink); line-height:1.25; }
+.zw-feat-d{ color:var(--muted); font-size:0.84rem; line-height:1.35; margin-top:3px; }
+.zw-feat-go{ width:32px; height:32px; border-radius:50%; background:#F1EFFB; color:var(--red); display:flex; align-items:center; justify-content:center; font-weight:700; flex:none; transition:background .15s ease, color .15s ease; }
+.st-key-feat_ai:hover .zw-feat-go, .st-key-feat_manual:hover .zw-feat-go{ background:var(--grad); color:#fff; }
 
 /* Chips: examples, presets, follow-ups */
 .st-key-examples button, .st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
@@ -865,7 +870,8 @@ if st.session_state.mode is None:
             with st.container(key=f"feat_{_key}"):
                 st.markdown(
                     f'<div class="zw-feat"><div class="zw-feat-ico">{_ico}</div>'
-                    f'<div><div class="zw-feat-t">{_title}</div><div class="zw-feat-d">{_desc}</div></div></div>',
+                    f'<div class="zw-feat-txt"><div class="zw-feat-t">{_title}</div><div class="zw-feat-d">{_desc}</div></div>'
+                    '<div class="zw-feat-go">→</div></div>',
                     unsafe_allow_html=True,
                 )
                 st.button(f"Choose: {_title}", key=f"pickbig_{_key}", on_click=set_mode, args=(_key,))
