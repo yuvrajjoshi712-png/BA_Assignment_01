@@ -573,76 +573,54 @@ def generate_followup(question: str, context: dict, history: List[Dict[str, str]
 st.markdown(
     """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 :root{
-  --ink:#221B2E; --muted:#6B6580; --line:#E3E2F0; --canvas:#F4F5FB;
-  --red:#E23744; --grad:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%);
-  --green:#12805C; --green-soft:#E3F5EC; --amber:#C2410C; --amber-soft:#FFEBDD;
-  --shadow:0 8px 30px rgba(34,27,46,.08);
+  --ink:#0F172A; --muted:#64748B; --line:#E2E8F0; --canvas:#F6F7F9;
+  --accent:#2563EB; --accent-dark:#1D4ED8; --accent-soft:#EFF4FF;
+  --green:#15803D; --green-soft:#E8F5EC; --amber:#B45309; --amber-soft:#FEF1E1;
 }
-.stApp{
-  background:
-    radial-gradient(760px 380px at 100% -8%, #FFE3DC 0%, transparent 62%),
-    radial-gradient(680px 380px at -10% 18%, #E6E4FF 0%, transparent 60%),
-    var(--canvas);
-  font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif; color:var(--ink);
-}
+.stApp{ background:var(--canvas); font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; color:var(--ink); }
 header[data-testid="stHeader"]{ background:transparent; }
-.block-container{ max-width:820px; padding-top:5rem !important; padding-bottom:7rem; }
+.block-container{ max-width:820px; padding-top:4.5rem !important; padding-bottom:7rem; }
 #MainMenu, footer{ visibility:hidden; }
 
-/* Hero banner */
-.zw-hero{ position:relative; overflow:hidden; display:flex; gap:18px; align-items:center;
-  padding:26px 30px; border-radius:36px; background:var(--grad); color:#fff; margin-bottom:1.6rem;
-  box-shadow:0 14px 34px rgba(226,55,68,.28); }
-.zw-hero::before{ content:""; position:absolute; right:-50px; top:-70px; width:230px; height:230px; border-radius:50%; background:rgba(255,255,255,.14); }
-.zw-hero::after{ content:""; position:absolute; right:110px; bottom:-80px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,.10); }
-.zw-hero > *{ position:relative; z-index:1; }
-.zw-logo{ width:60px; height:60px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:30px; flex:none; box-shadow:0 6px 16px rgba(0,0,0,.15); }
-.zw-title{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.7rem; line-height:1.2; color:#fff; letter-spacing:-0.02em; }
-.zw-sub{ color:rgba(255,255,255,.9); font-size:0.97rem; margin-top:5px; }
+/* Header */
+.zw-hero{ display:flex; gap:16px; align-items:center; padding-bottom:18px; margin-bottom:6px; border-bottom:1px solid var(--line); }
+.zw-logo{ width:46px; height:46px; border-radius:12px; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.3rem; flex:none; }
+.zw-title{ font-weight:700; font-size:1.55rem; line-height:1.2; color:var(--ink); letter-spacing:-0.02em; }
+.zw-sub{ color:var(--muted); font-size:0.95rem; margin-top:3px; }
 
 /* Headings and notes */
-.zw-h{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:1.05rem; color:var(--ink); margin:1.5rem 0 0.7rem 0; }
-.zw-note{ color:var(--muted); font-size:0.92rem; margin:0.8rem 0 0.4rem 0; }
+.zw-h{ font-weight:600; font-size:1.02rem; color:var(--ink); margin:1.5rem 0 0.7rem 0; }
+.zw-note{ color:var(--muted); font-size:0.9rem; margin:0.8rem 0 0.4rem 0; }
 .zw-center{ text-align:center; }
 
-/* Pill-shaped method switch (after a method is chosen) */
-.st-key-picker{ background:#fff; border-radius:999px; padding:6px; box-shadow:var(--shadow); }
-.st-key-picker [data-testid="stHorizontalBlock"]{ gap:6px; }
-.st-key-picker button{ height:3.1rem; border:none; font-weight:700; }
-.st-key-picker button p{ color:inherit !important; font-size:1rem; }
-.st-key-picker button[data-testid="stBaseButton-secondary"]{ background:transparent; color:var(--muted); box-shadow:none; }
+/* Method switch (after a method is chosen) */
+.st-key-picker{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:5px; }
+.st-key-picker [data-testid="stHorizontalBlock"]{ gap:5px; }
+.st-key-picker button{ height:2.7rem; border:none; font-weight:600; border-radius:9px; }
+.st-key-picker button p{ color:inherit !important; }
+.st-key-picker button[data-testid="stBaseButton-secondary"]{ background:transparent; color:var(--muted); }
 .st-key-picker button[data-testid="stBaseButton-secondary"]:hover{ background:var(--canvas); color:var(--ink); }
-.st-key-picker button[data-testid="stBaseButton-primary"]{ background:var(--grad); color:#fff; box-shadow:0 6px 16px rgba(226,55,68,.35); }
+.st-key-picker button[data-testid="stBaseButton-primary"]{ background:var(--ink); color:#fff; }
 
-/* Landing cards - compact, whole card clickable */
-.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:22px; padding:0 !important; gap:0 !important;
-  box-shadow:0 4px 16px rgba(34,27,46,.07); border:1.5px solid var(--line); min-height:84px;
-  transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease; }
-.st-key-feat_ai:hover, .st-key-feat_manual:hover{ border-color:var(--red); box-shadow:0 8px 22px rgba(226,55,68,.16); transform:translateY(-2px); }
-.st-key-feat_ai:has(button:focus-visible), .st-key-feat_manual:has(button:focus-visible){ border-color:var(--red); }
-[class*="st-key-feat_"] [data-testid="stMarkdownContainer"], [class*="st-key-feat_"] [data-testid="stElementContainer"]{ margin:0 !important; }
-.st-key-pickbig_ai, .st-key-pickbig_manual{ position:absolute !important; inset:0; z-index:5; margin:0 !important; }
-.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:22px; }
-.zw-feat{ display:flex; align-items:center; gap:14px; padding:18px 20px; }
-.zw-feat-ico{ width:46px; height:46px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:21px; flex:none; box-shadow:0 6px 14px rgba(226,55,68,.28); }
-.zw-feat-txt{ flex:1; min-width:0; }
-.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1rem; color:var(--ink); line-height:1.25; }
-.zw-feat-d{ color:var(--muted); font-size:0.84rem; line-height:1.35; margin-top:3px; }
-.zw-feat-go{ width:32px; height:32px; border-radius:50%; background:#F1EFFB; color:var(--red); display:flex; align-items:center; justify-content:center; font-weight:700; flex:none; transition:background .15s ease, color .15s ease; }
-.st-key-feat_ai:hover .zw-feat-go, .st-key-feat_manual:hover .zw-feat-go{ background:var(--grad); color:#fff; }
+/* Landing cards */
+[class*="st-key-feat_"]{ background:#fff; border:1px solid var(--line) !important; border-radius:14px !important; padding:6px 8px; }
+[class*="st-key-feat_"]:hover{ border-color:#BFD0F5 !important; box-shadow:0 4px 18px rgba(15,23,42,.06); }
+.zw-eyebrow{ color:var(--accent); font-size:0.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px; }
+.zw-feat-t{ font-weight:700; font-size:1.05rem; color:var(--ink); }
+.zw-feat-d{ color:var(--muted); font-size:0.88rem; line-height:1.45; margin:4px 0 8px 0; }
 
 /* Chips: examples, presets, follow-ups */
-.st-key-examples button, .st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
-.st-key-examples button:hover, .st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--red); color:var(--red); }
+.st-key-examples button, .st-key-presets button, .st-key-followups button{ background:#fff; border:1px solid var(--line); color:var(--ink); font-weight:500; }
+.st-key-examples button:hover, .st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--accent); color:var(--accent); }
 .st-key-followups{ margin-top:6px; }
 
 /* Result tiles */
 .zw-tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:2px 0 14px 0; }
-.zw-tile{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
+.zw-tile{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
 .zw-k{ color:var(--muted); font-size:0.78rem; margin-bottom:4px; }
-.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.7rem; color:var(--ink); line-height:1.1; }
+.zw-v{ font-weight:700; font-size:1.7rem; color:var(--ink); line-height:1.1; }
 .zw-v span{ font-size:0.9rem; font-weight:600; color:var(--muted); margin-left:2px; }
 .zw-v.zw-status{ font-size:1.15rem; padding-top:6px; }
 .zw-tile.zw-late{ background:var(--amber-soft); border-color:#F4C79B; }
@@ -652,28 +630,26 @@ header[data-testid="stHeader"]{ background:transparent; }
 
 /* Driver chips */
 .zw-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 6px 0; }
-.zw-chip{ padding:6px 14px; border-radius:999px; font-size:0.86rem; font-weight:600; }
+.zw-chip{ padding:5px 12px; border-radius:999px; font-size:0.85rem; font-weight:600; }
 .zw-chip.up{ background:var(--amber-soft); color:var(--amber); }
 .zw-chip.down{ background:var(--green-soft); color:var(--green); }
 
 /* Manual form groups */
-[class*="st-key-grp_"]{ background:#fff; border:none !important; border-radius:26px !important; box-shadow:var(--shadow); padding:6px 8px; }
-.zw-grp{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:0.97rem; margin-bottom:4px; color:var(--ink); }
+[class*="st-key-grp_"]{ background:#fff; border:1px solid var(--line) !important; border-radius:14px !important; padding:6px 8px; }
+.zw-grp{ font-weight:600; font-size:0.95rem; margin-bottom:4px; color:var(--ink); }
 
 /* Chat */
-[data-testid="stChatMessage"]{ background:#fff; border-radius:26px; box-shadow:var(--shadow); padding:16px 20px; margin-bottom:12px; }
-[data-testid="stChatMessageAvatarUser"], [data-testid="stChatMessageAvatarAssistant"]{ border-radius:50% !important; }
-[data-testid="stChatInput"]{ border-radius:999px; box-shadow:var(--shadow); }
+[data-testid="stChatMessage"]{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin-bottom:10px; }
 
 /* Buttons */
 .stButton > button, [data-testid="stFormSubmitButton"] > button{ font-weight:600; }
-button[data-testid="stBaseButton-primary"], button[data-testid="stBaseButton-primaryFormSubmit"]{ background:var(--grad); border:none; color:#fff; }
-button[data-testid="stBaseButton-primary"]:hover, button[data-testid="stBaseButton-primaryFormSubmit"]:hover{ filter:brightness(1.06); }
-button:focus-visible, a:focus-visible{ outline:2px solid var(--red) !important; outline-offset:2px; }
+button[data-testid="stBaseButton-primary"], button[data-testid="stBaseButton-primaryFormSubmit"]{ background:var(--accent); border-color:var(--accent); color:#fff; }
+button[data-testid="stBaseButton-primary"]:hover, button[data-testid="stBaseButton-primaryFormSubmit"]:hover{ background:var(--accent-dark); border-color:var(--accent-dark); }
+button:focus-visible, a:focus-visible{ outline:2px solid var(--accent) !important; outline-offset:2px; }
 textarea:focus-visible, input:focus-visible{ outline:none !important; }
 
 .zw-foot{ text-align:center; color:var(--muted); font-size:0.78rem; margin-top:2.4rem; }
-@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } }
+@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.3rem; } }
 </style>
 """,
     unsafe_allow_html=True,
@@ -852,7 +828,7 @@ def show_ai_problem(headline: str, detail: Optional[str]) -> None:
 # HEADER + METHOD PICKER
 # =============================================================================
 st.markdown(
-    '<div class="zw-hero"><div class="zw-logo">🛵</div><div>'
+    '<div class="zw-hero"><div class="zw-logo">Z</div><div>'
     '<div class="zw-title">Zwigato Delivery Delay Predictor</div>'
     '<div class="zw-sub">Check whether an order is likely to arrive late, and what the manager can do about it.</div>'
     "</div></div>",
@@ -862,19 +838,23 @@ st.markdown(
 if st.session_state.mode is None:
     st.markdown('<div class="zw-h">How would you like to enter the order?</div>', unsafe_allow_html=True)
     _feats = [
-        ("ai", "💬", "Describe it in words", "Type the order like a message"),
-        ("manual", "🧮", "Fill in the form", "Dropdowns and quick presets"),
+        ("ai", "AI-assisted", "Describe it in words",
+         "Type the order like a message. The assistant fills in the details and asks for anything missing.",
+         "Start typing"),
+        ("manual", "Manual", "Fill in the form",
+         "Choose areas, rider and conditions from dropdowns, or start from a preset.",
+         "Open the form"),
     ]
-    for _col, (_key, _ico, _title, _desc) in zip(st.columns(2), _feats):
+    for _col, (_key, _eyebrow, _title, _desc, _btn) in zip(st.columns(2), _feats):
         with _col:
-            with st.container(key=f"feat_{_key}"):
+            with st.container(border=True, key=f"feat_{_key}"):
                 st.markdown(
-                    f'<div class="zw-feat"><div class="zw-feat-ico">{_ico}</div>'
-                    f'<div class="zw-feat-txt"><div class="zw-feat-t">{_title}</div><div class="zw-feat-d">{_desc}</div></div>'
-                    '<div class="zw-feat-go">→</div></div>',
+                    f'<div class="zw-eyebrow">{_eyebrow}</div><div class="zw-feat-t">{_title}</div>'
+                    f'<div class="zw-feat-d">{_desc}</div>',
                     unsafe_allow_html=True,
                 )
-                st.button(f"Choose: {_title}", key=f"pickbig_{_key}", on_click=set_mode, args=(_key,))
+                st.button(_btn, key=f"pickbig_{_key}", on_click=set_mode, args=(_key,),
+                          type="primary", use_container_width=True)
     st.markdown(
         f'<div class="zw-note zw-center">An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.</div>',
         unsafe_allow_html=True,
@@ -884,7 +864,7 @@ else:
         _pc1, _pc2 = st.columns(2)
         for _col, (_key, _label) in zip(
             (_pc1, _pc2),
-            [("ai", "💬  Describe it in words"), ("manual", "🧮  Fill in the form")],
+            [("ai", "Describe in words"), ("manual", "Fill in the form")],
         ):
             with _col:
                 st.button(
@@ -1005,7 +985,7 @@ def render_ai_mode() -> None:
         )
         with st.container(key="examples"):
             ex_cols = st.columns(2)
-            for i, (col, label) in enumerate(zip(ex_cols, ["🌧️  Rainy evening rush", "☀️  Calm afternoon"])):
+            for i, (col, label) in enumerate(zip(ex_cols, ["Rainy evening rush", "Calm afternoon"])):
                 with col:
                     st.button(label, key=f"ex_{i}", on_click=use_example, args=(EXAMPLE_ORDERS[i],),
                               use_container_width=True)
@@ -1017,7 +997,7 @@ def render_ai_mode() -> None:
             st.button("Start over", key="clear_chat", on_click=clear_chat, use_container_width=True)
 
     for m in messages:
-        with st.chat_message(m["role"], avatar="🛵" if m["role"] == "assistant" else None):
+        with st.chat_message(m["role"], avatar=None):
             if m.get("result"):
                 r = m["result"]
                 render_tiles(r["minutes"], r["prob"], r["late"])
@@ -1031,7 +1011,7 @@ def render_ai_mode() -> None:
         with st.chat_message("user"):
             st.markdown(prompt)
         messages.append({"role": "user", "content": prompt})
-        with st.chat_message("assistant", avatar="🛵"):
+        with st.chat_message("assistant"):
             answer, result = process_chat_message(prompt, history)
         messages.append({"role": "assistant", "content": answer, "result": result})
 
@@ -1073,21 +1053,21 @@ FORM_DEFAULTS = {
 }
 
 PRESETS = {
-    "🌧️ Rainy rush": {
+    "Rainy rush": {
         "f_time": dt.time(19, 30), "f_prep": 20.0, "f_multi": 2,
         "f_rest_area": "MG Road", "f_cust_area": "Whitefield",
         "f_age": 30, "f_vehicle": "motorcycle ", "f_rating": 4.8, "f_vcond": 2,
         "f_weather": "Stormy", "f_traffic": "High", "f_city": "Metropolitian",
         "f_otype": "Meal ", "f_festival": "No",
     },
-    "☀️ Calm afternoon": {
+    "Calm afternoon": {
         "f_time": dt.time(15, 0), "f_prep": 10.0, "f_multi": 0,
         "f_rest_area": "Indiranagar", "f_cust_area": "Koramangala",
         "f_age": 26, "f_vehicle": "scooter ", "f_rating": 4.6, "f_vcond": 3,
         "f_weather": "Sunny", "f_traffic": "Low", "f_city": "Metropolitian",
         "f_otype": "Snack ", "f_festival": "No",
     },
-    "🎉 Festival night": {
+    "Festival night": {
         "f_time": dt.time(20, 30), "f_prep": 25.0, "f_multi": 3,
         "f_rest_area": "Jayanagar", "f_cust_area": "Hebbal",
         "f_age": 24, "f_vehicle": "motorcycle ", "f_rating": 4.3, "f_vcond": 1,
@@ -1167,7 +1147,7 @@ def render_manual_mode() -> None:
             with col:
                 st.button(name, key=f"preset_{name}", on_click=apply_preset, args=(name,), use_container_width=True)
         with pcols[3]:
-            st.button("↺ Reset", key="reset_form_btn", on_click=reset_form, use_container_width=True)
+            st.button("Reset", key="reset_form_btn", on_click=reset_form, use_container_width=True)
 
     with st.container(border=True, key="grp_order"):
         st.markdown('<div class="zw-grp">Order</div>', unsafe_allow_html=True)
@@ -1289,7 +1269,7 @@ def render_manual_mode() -> None:
         st.markdown('<div class="zw-h">Result</div>', unsafe_allow_html=True)
         render_tiles(res["minutes"], res["prob"], res["late"])
         render_recommendations(res["rec"])
-        st.download_button("⬇  Download summary", data=res["summary"], file_name="zwigato_order_summary.txt",
+        st.download_button("Download summary", data=res["summary"], file_name="zwigato_order_summary.txt",
                            mime="text/plain", key="dl_summary")
         st.markdown('<div class="zw-h">What is driving this prediction</div>', unsafe_allow_html=True)
         if res["drivers"]:
