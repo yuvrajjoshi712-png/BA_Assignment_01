@@ -472,6 +472,11 @@ def parse_user_order(message: str) -> Tuple[Optional[dict], Optional[str]]:
     prompt = (
         "Current draft from earlier chat messages:\n"
         + json.dumps(draft, indent=2)
+        + "\n\nA completed prediction already exists in this conversation: "
+        + ("YES" if st.session_state.get("last_context") else "NO")
+        + ".\nIf it exists and the new message is a question about it (why, what, how, explain, "
+        "what if, draft a message, what should the manager do), set intent to \"follow_up\" and leave "
+        "every order field null. Use \"new_prediction\" only when the user describes a new order."
         + "\n\nNew user message:\n"
         + message
         + "\n\nMerge the new information into the current draft and return ONLY JSON."
@@ -947,8 +952,29 @@ FOLLOWUPS = [
 ]
 
 
+def _answer_followup(chat_text: str, history: List[Dict[str, str]]) -> Tuple[str, Optional[dict]]:
+    ctx = dict(st.session_state.last_context)
+    ctx["recommended_actions_shown_to_user"] = [
+        f"{a['title']}: {a['detail']}" for a in build_recommendations(st.session_state.last_context)["actions"]
+    ]
+    with st.spinner("Thinking..."):
+        answer, follow_error = generate_followup(chat_text, ctx, history)
+    if follow_error:
+        show_ai_problem("I couldn't write a reply just now. Please try again.", follow_error)
+        return "I couldn't write a reply for that question.", None
+    st.markdown(answer)
+    return answer, None
+
+
 def process_chat_message(chat_text: str, history: List[Dict[str, str]]) -> Tuple[str, Optional[dict]]:
     """Runs inside an assistant chat bubble. Returns (text to store, result dict or None)."""
+    has_prediction = st.session_state.last_context is not None
+    draft_in_progress = any(v not in (None, "") for v in st.session_state.chat_draft.values())
+
+    # A question with no numbers in it can only be about the prediction we already have.
+    if has_prediction and not draft_in_progress and not re.search(r"\d", chat_text):
+        return _answer_followup(chat_text, history)
+
     with st.spinner("Reading the order details..."):
         parsed, parse_error = parse_user_order(chat_text)
 
@@ -961,16 +987,13 @@ def process_chat_message(chat_text: str, history: List[Dict[str, str]]) -> Tuple
 
     intent = parsed.get("intent", "new_prediction")
     reply = parsed.get("reply", "")
+    filled = sum(1 for v in (parsed.get("order") or {}).values() if v not in (None, ""))
 
-    if intent == "follow_up" and st.session_state.last_context:
-        answer, follow_error = generate_followup(chat_text, st.session_state.last_context, history)
-        if follow_error:
-            show_ai_problem("I couldn't write a reply just now. Please try again.", follow_error)
-            return "I couldn't write a reply for that question.", None
-        st.markdown(answer)
-        return answer, None
+    # With a prediction on screen, anything that is not a fresh, fairly complete order is a follow-up.
+    if has_prediction and not draft_in_progress and (intent in ("follow_up", "general") or filled < 5):
+        return _answer_followup(chat_text, history)
 
-    if intent == "general" and st.session_state.last_context is None:
+    if intent == "general" and not has_prediction:
         answer = reply or "Describe a delivery order and I'll assess its delay risk."
         st.markdown(answer)
         return answer, None
