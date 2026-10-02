@@ -609,12 +609,48 @@ header[data-testid="stHeader"]{ background:transparent; }
 .st-key-picker button[data-testid="stBaseButton-secondary"]:hover{ background:var(--canvas); color:var(--ink); }
 .st-key-picker button[data-testid="stBaseButton-primary"]{ background:var(--ink); color:#fff; }
 
+/* Icons (inline SVG masks) */
+.ic{ display:inline-block; width:20px; height:20px; background:currentColor; flex:none; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; -webkit-mask-size:contain; mask-size:contain; }
+.ic-chat{ -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'/%3E%3C/svg%3E"); }
+.ic-doc{ -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3Cpath d='M16 13H8'/%3E%3Cpath d='M16 17H8'/%3E%3Cpath d='M10 9H8'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 2v6h6'/%3E%3Cpath d='M16 13H8'/%3E%3Cpath d='M16 17H8'/%3E%3Cpath d='M10 9H8'/%3E%3C/svg%3E"); }
+.ic-clock{ -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E"); }
+.ic-chart{ -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20V10'/%3E%3Cpath d='M18 20V4'/%3E%3Cpath d='M6 20v-4'/%3E%3C/svg%3E"); mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20V10'/%3E%3Cpath d='M18 20V4'/%3E%3Cpath d='M6 20v-4'/%3E%3C/svg%3E"); }
+
+/* Landing headline */
+.zw-q{ font-family:'Sora','Inter',sans-serif; font-weight:700; font-size:1.6rem; letter-spacing:-0.02em; color:var(--ink); line-height:1.25; margin:0.2rem 0 0.25rem 0; }
+.zw-q-sub{ color:var(--muted); font-size:0.98rem; margin-bottom:0.7rem; }
+.zw-rule{ display:inline-flex; align-items:center; gap:8px; background:var(--accent-soft); color:#1E40AF; border:1px solid #D6E2FB; border-radius:999px; padding:5px 14px 5px 10px; font-size:0.84rem; font-weight:600; }
+.zw-rule .ic{ width:16px; height:16px; }
+.zw-h2{ font-weight:600; font-size:0.98rem; color:var(--ink); margin:1.3rem 0 0.6rem 0; }
+
 /* Landing cards */
-[class*="st-key-feat_"]{ background:#fff; border:1px solid var(--line) !important; border-radius:14px !important; padding:6px 8px; }
-[class*="st-key-feat_"]:hover{ border-color:#BFD0F5 !important; box-shadow:0 4px 18px rgba(15,23,42,.06); }
-.zw-eyebrow{ color:var(--accent); font-size:0.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:4px; }
-.zw-feat-t{ font-weight:700; font-size:1.05rem; color:var(--ink); }
-.zw-feat-d{ color:var(--muted); font-size:0.88rem; line-height:1.45; margin:4px 0 8px 0; }
+[class*="st-key-feat_"]{ background:#fff; border:1px solid var(--line) !important; border-radius:16px !important; padding:8px 10px;
+  box-shadow:0 2px 12px rgba(15,23,42,.05); }
+.st-key-feat_ai{ border:1.5px solid #F4B8B0 !important; box-shadow:0 8px 26px rgba(226,55,68,.12); }
+[class*="st-key-feat_"]:hover{ box-shadow:0 8px 26px rgba(15,23,42,.10); }
+.zw-card-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.zw-ico{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.zw-ico.red{ background:#FFECEA; color:#E23744; }
+.zw-ico.blue{ background:var(--accent-soft); color:var(--accent); }
+.zw-badge{ background:#FFECEA; color:#C62F3C; font-size:0.72rem; font-weight:700; padding:4px 11px; border-radius:999px; }
+.zw-feat-t{ font-weight:700; font-size:1.08rem; color:var(--ink); }
+.zw-feat-d{ color:var(--muted); font-size:0.88rem; line-height:1.45; margin:4px 0 10px 0; }
+.zw-example{ color:#64748B; font-size:0.8rem; line-height:1.45; background:#F8FAFC; border-left:3px solid #F4B8B0; border-radius:6px; padding:7px 10px; margin-bottom:8px; }
+.zw-example.blue{ border-left-color:#BFD0F5; }
+.st-key-pickbig_ai button[data-testid="stBaseButton-primary"]{ background:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%); border:none; color:#fff; font-weight:700; }
+.st-key-pickbig_ai button[data-testid="stBaseButton-primary"]:hover{ filter:brightness(1.06); background:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%); }
+.st-key-pickbig_manual button{ background:#fff; border:1.5px solid var(--accent); font-weight:700; }
+.st-key-pickbig_manual button p{ color:var(--accent) !important; }
+.st-key-pickbig_manual button:hover{ background:var(--accent-soft); border-color:var(--accent-dark); }
+
+/* How the prediction works */
+[data-testid="stExpander"]{ background:#fff; border:1px solid var(--line); border-radius:14px; }
+.zw-steps3{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:4px; }
+.zw-step{ display:flex; gap:10px; align-items:flex-start; background:#F8FAFC; border-radius:12px; padding:12px; }
+.zw-stepn{ width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; font-size:0.78rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none; }
+.zw-step-t{ font-weight:600; font-size:0.9rem; color:var(--ink); }
+.zw-step-d{ color:var(--muted); font-size:0.82rem; margin-top:2px; line-height:1.4; }
+.zw-foot-note{ color:var(--muted); font-size:0.78rem; margin-top:10px; }
 
 /* Chips: examples, presets, follow-ups */
 .st-key-examples button, .st-key-presets button, .st-key-followups button{ background:#fff; border:1px solid var(--line); color:var(--ink); font-weight:500; }
@@ -654,7 +690,7 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent) !importan
 textarea:focus-visible, input:focus-visible{ outline:none !important; }
 
 .zw-foot{ text-align:center; color:var(--muted); font-size:0.78rem; margin-top:2.4rem; }
-@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } }
+@media (max-width:640px){ .zw-tiles, .zw-steps3{ grid-template-columns:1fr; } .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } }
 </style>
 """,
     unsafe_allow_html=True,
@@ -841,29 +877,38 @@ st.markdown(
 )
 
 if st.session_state.mode is None:
-    st.markdown('<div class="zw-h">How would you like to enter the order?</div>', unsafe_allow_html=True)
-    _feats = [
-        ("ai", "AI-assisted", "Describe it in words",
-         "Type the order like a message. The assistant fills in the details and asks for anything missing.",
-         "Start typing"),
-        ("manual", "Manual", "Fill in the form",
-         "Choose areas, rider and conditions from dropdowns, or start from a preset.",
-         "Open the form"),
-    ]
-    for _col, (_key, _eyebrow, _title, _desc, _btn) in zip(st.columns(2), _feats):
-        with _col:
-            with st.container(border=True, key=f"feat_{_key}"):
-                st.markdown(
-                    f'<div class="zw-eyebrow">{_eyebrow}</div><div class="zw-feat-t">{_title}</div>'
-                    f'<div class="zw-feat-d">{_desc}</div>',
-                    unsafe_allow_html=True,
-                )
-                st.button(_btn, key=f"pickbig_{_key}", on_click=set_mode, args=(_key,),
-                          type="primary", use_container_width=True)
     st.markdown(
-        f'<div class="zw-note zw-center">An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.</div>',
+        '<div class="zw-q">Will this order be delivered late?</div>'
+        '<div class="zw-q-sub">Enter a few order details and get an instant prediction.</div>'
+        f'<span class="zw-rule"><i class="ic ic-clock"></i>Late delivery = more than {LATE_THRESHOLD} minutes</span>'
+        '<div class="zw-h2">How would you like to provide the order details?</div>',
         unsafe_allow_html=True,
     )
+    _col_ai, _col_manual = st.columns(2)
+    with _col_ai:
+        with st.container(border=True, key="feat_ai"):
+            st.markdown(
+                '<div class="zw-card-top"><span class="zw-ico red"><i class="ic ic-chat"></i></span>'
+                '<span class="zw-badge">Recommended</span></div>'
+                '<div class="zw-feat-t">Describe the order</div>'
+                '<div class="zw-feat-d">Tell us about the order in your own words. The AI will fill in the details for you.</div>'
+                '<div class="zw-example"><b>Example:</b> “Order from Vastrapur to Navrangpura, 4 km away, '
+                'assigned to Rider 12, placed at 7:20 PM, raining now.”</div>',
+                unsafe_allow_html=True,
+            )
+            st.button("Try AI Assistant →", key="pickbig_ai", on_click=set_mode, args=("ai",),
+                      type="primary", use_container_width=True)
+    with _col_manual:
+        with st.container(border=True, key="feat_manual"):
+            st.markdown(
+                '<div class="zw-card-top"><span class="zw-ico blue"><i class="ic ic-doc"></i></span></div>'
+                '<div class="zw-feat-t">Enter details manually</div>'
+                '<div class="zw-feat-d">Fill in the form by selecting the area, rider, weather and other conditions.</div>'
+                '<div class="zw-example blue">Quick presets are included: rainy rush, calm afternoon and festival night.</div>',
+                unsafe_allow_html=True,
+            )
+            st.button("Enter Manually →", key="pickbig_manual", on_click=set_mode, args=("manual",),
+                      type="secondary", use_container_width=True)
 else:
     with st.container(key="picker"):
         _pc1, _pc2 = st.columns(2)
@@ -1308,9 +1353,17 @@ if st.session_state.mode == "ai":
 elif st.session_state.mode == "manual":
     render_manual_mode()
 
-st.markdown(
-    '<div class="zw-foot">Linear regression estimates delivery minutes; logistic regression estimates the chance of '
-    f"a late delivery, defined as taking more than {LATE_THRESHOLD} minutes (a business rule for this case study, not a fixed SLA). "
-    "The ML models make the prediction; the AI layer only explains it.</div>",
-    unsafe_allow_html=True,
-)
+with st.expander("How the prediction works", icon=":material/analytics:"):
+    st.markdown(
+        '<div class="zw-steps3">'
+        '<div class="zw-step"><span class="zw-stepn">1</span><div><div class="zw-step-t">We estimate delivery time</div>'
+        '<div class="zw-step-d">Using linear regression.</div></div></div>'
+        '<div class="zw-step"><span class="zw-stepn">2</span><div><div class="zw-step-t">We calculate the chance of delay</div>'
+        '<div class="zw-step-d">Using logistic regression.</div></div></div>'
+        '<div class="zw-step"><span class="zw-stepn">3</span><div><div class="zw-step-t">You get a prediction</div>'
+        '<div class="zw-step-d">The ML models make the prediction; the AI layer only explains it.</div></div></div>'
+        "</div>"
+        f'<div class="zw-foot-note">Late means delivery takes more than {LATE_THRESHOLD} minutes '
+        "(a business rule for this case study, not a fixed SLA).</div>",
+        unsafe_allow_html=True,
+    )
