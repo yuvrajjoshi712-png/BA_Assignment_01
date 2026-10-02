@@ -575,8 +575,8 @@ st.markdown(
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap');
 :root{
-  --ink:#221B2E; --muted:#6B6580; --line:#E3E2F0; --canvas:#F4F5FB; --card:#FFFFFF;
-  --red:#E23744; --orange:#FF7A3D; --grad:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%);
+  --ink:#221B2E; --muted:#6B6580; --line:#E3E2F0; --canvas:#F4F5FB;
+  --red:#E23744; --grad:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%);
   --green:#12805C; --green-soft:#E3F5EC; --amber:#C2410C; --amber-soft:#FFEBDD;
   --shadow:0 8px 30px rgba(34,27,46,.08);
 }
@@ -607,7 +607,7 @@ header[data-testid="stHeader"]{ background:transparent; }
 .zw-note{ color:var(--muted); font-size:0.92rem; margin:0.8rem 0 0.4rem 0; }
 .zw-center{ text-align:center; }
 
-/* Pill-shaped method switch */
+/* Pill-shaped method switch (after a method is chosen) */
 .st-key-picker{ background:#fff; border-radius:999px; padding:6px; box-shadow:var(--shadow); }
 .st-key-picker [data-testid="stHorizontalBlock"]{ gap:6px; }
 .st-key-picker button{ height:3.1rem; border:none; font-weight:700; }
@@ -616,112 +616,40 @@ header[data-testid="stHeader"]{ background:transparent; }
 .st-key-picker button[data-testid="stBaseButton-secondary"]:hover{ background:var(--canvas); color:var(--ink); }
 .st-key-picker button[data-testid="stBaseButton-primary"]{ background:var(--grad); color:#fff; box-shadow:0 6px 16px rgba(226,55,68,.35); }
 
-/* Example chips */
-.st-key-examples button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
-.st-key-examples button:hover{ border-color:var(--red); color:var(--red); }
-
-
-/* Feature cards (landing) */
-.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:32px; padding:26px 24px 22px 24px;
-  box-shadow:var(--shadow); border:2px solid transparent; transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
-.st-key-feat_ai:hover, .st-key-feat_manual:hover{ transform:translateY(-5px); box-shadow:0 18px 44px rgba(226,55,68,.20); border-color:#F6B5AE; }
+/* Landing cards - compact, whole card clickable */
+.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:20px; padding:14px 16px;
+  box-shadow:0 2px 10px rgba(34,27,46,.06); border:1.5px solid var(--line); transition:border-color .15s ease, box-shadow .15s ease; }
+.st-key-feat_ai:hover, .st-key-feat_manual:hover{ border-color:var(--red); box-shadow:0 6px 18px rgba(226,55,68,.14); }
 .st-key-feat_ai:has(button:focus-visible), .st-key-feat_manual:has(button:focus-visible){ border-color:var(--red); }
 .st-key-pickbig_ai, .st-key-pickbig_manual{ position:absolute !important; inset:0; z-index:5; margin:0 !important; }
-.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:32px; }
-.zw-feat-ico{ width:62px; height:62px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 20px rgba(226,55,68,.30); margin-bottom:14px; }
-.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.2rem; color:var(--ink); }
-.zw-feat-d{ color:var(--muted); font-size:0.92rem; line-height:1.5; margin:6px 0 12px 0; min-height:4.2em; }
-.zw-feat-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-.zw-feat-tags span{ background:#F1EFFB; color:#5B5380; font-size:0.74rem; font-weight:700; padding:4px 12px; border-radius:999px; }
-.zw-feat-go{ display:inline-block; background:var(--grad); color:#fff; font-weight:700; font-size:0.92rem; padding:9px 20px; border-radius:999px; }
+.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:20px; }
+.zw-feat{ display:flex; align-items:center; gap:12px; }
+.zw-feat-ico{ width:42px; height:42px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:20px; flex:none; }
+.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:0.98rem; color:var(--ink); line-height:1.25; }
+.zw-feat-d{ color:var(--muted); font-size:0.82rem; line-height:1.35; margin-top:2px; }
 
-/* Steps strip */
-.zw-steps{ display:flex; justify-content:center; gap:10px 22px; flex-wrap:wrap; margin:22px 0 4px 0; color:var(--muted); font-size:0.88rem; }
-.zw-steps b{ display:inline-flex; width:24px; height:24px; border-radius:50%; background:#fff; color:var(--red); align-items:center; justify-content:center; font-size:0.8rem; margin-right:8px; box-shadow:0 2px 8px rgba(34,27,46,.12); }
-
-/* Preset and follow-up chips */
-.st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
-.st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--red); color:var(--red); }
+/* Chips: examples, presets, follow-ups */
+.st-key-examples button, .st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
+.st-key-examples button:hover, .st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--red); color:var(--red); }
 .st-key-followups{ margin-top:6px; }
 
-/* Result card with ring */
-.zw-result{ display:flex; align-items:center; gap:24px; flex-wrap:wrap; background:#fff; border-radius:28px; padding:18px 26px; box-shadow:var(--shadow); margin:2px 0 14px 0; }
-.zw-ring{ position:relative; width:110px; height:110px; border-radius:50%; flex:none; }
-.zw-ring-in{ position:absolute; inset:12px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.zw-ring-n{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.45rem; line-height:1; color:var(--ink); }
-.zw-ring-l{ font-size:0.68rem; color:var(--muted); margin-top:3px; }
-.zw-k{ color:var(--muted); font-size:0.82rem; margin-bottom:2px; }
-.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:2.3rem; color:var(--ink); line-height:1.1; }
-.zw-v span{ font-size:1rem; font-weight:600; color:var(--muted); margin-left:4px; }
-.zw-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:0.85rem; margin-top:8px; }
-.zw-pill.zw-late{ background:var(--amber-soft); color:var(--amber); }
-.zw-pill.zw-ok{ background:var(--green-soft); color:var(--green); }
-.zw-limit{ color:var(--muted); font-size:0.8rem; margin-left:8px; }
+/* Result tiles */
+.zw-tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:2px 0 14px 0; }
+.zw-tile{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px; }
+.zw-k{ color:var(--muted); font-size:0.78rem; margin-bottom:4px; }
+.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.7rem; color:var(--ink); line-height:1.1; }
+.zw-v span{ font-size:0.9rem; font-weight:600; color:var(--muted); margin-left:2px; }
+.zw-v.zw-status{ font-size:1.15rem; padding-top:6px; }
+.zw-tile.zw-late{ background:var(--amber-soft); border-color:#F4C79B; }
+.zw-tile.zw-late .zw-v{ color:var(--amber); }
+.zw-tile.zw-ok{ background:var(--green-soft); border-color:#A9DCC4; }
+.zw-tile.zw-ok .zw-v{ color:var(--green); }
 
 /* Driver chips */
 .zw-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 6px 0; }
 .zw-chip{ padding:6px 14px; border-radius:999px; font-size:0.86rem; font-weight:600; }
 .zw-chip.up{ background:var(--amber-soft); color:var(--amber); }
 .zw-chip.down{ background:var(--green-soft); color:var(--green); }
-
-
-/* Feature cards (landing) */
-.st-key-feat_ai, .st-key-feat_manual{ position:relative; background:#fff; border-radius:32px; padding:26px 24px 22px 24px;
-  box-shadow:var(--shadow); border:2px solid transparent; transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease; }
-.st-key-feat_ai:hover, .st-key-feat_manual:hover{ transform:translateY(-5px); box-shadow:0 18px 44px rgba(226,55,68,.20); border-color:#F6B5AE; }
-.st-key-feat_ai:has(button:focus-visible), .st-key-feat_manual:has(button:focus-visible){ border-color:var(--red); }
-.st-key-pickbig_ai, .st-key-pickbig_manual{ position:absolute !important; inset:0; z-index:5; margin:0 !important; }
-.st-key-pickbig_ai button, .st-key-pickbig_manual button{ width:100%; height:100%; min-height:100%; opacity:0; cursor:pointer; border-radius:32px; }
-.zw-feat-ico{ width:62px; height:62px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 8px 20px rgba(226,55,68,.30); margin-bottom:14px; }
-.zw-feat-t{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.2rem; color:var(--ink); }
-.zw-feat-d{ color:var(--muted); font-size:0.92rem; line-height:1.5; margin:6px 0 12px 0; min-height:4.2em; }
-.zw-feat-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
-.zw-feat-tags span{ background:#F1EFFB; color:#5B5380; font-size:0.74rem; font-weight:700; padding:4px 12px; border-radius:999px; }
-.zw-feat-go{ display:inline-block; background:var(--grad); color:#fff; font-weight:700; font-size:0.92rem; padding:9px 20px; border-radius:999px; }
-
-/* Steps strip */
-.zw-steps{ display:flex; justify-content:center; gap:10px 22px; flex-wrap:wrap; margin:22px 0 4px 0; color:var(--muted); font-size:0.88rem; }
-.zw-steps b{ display:inline-flex; width:24px; height:24px; border-radius:50%; background:#fff; color:var(--red); align-items:center; justify-content:center; font-size:0.8rem; margin-right:8px; box-shadow:0 2px 8px rgba(34,27,46,.12); }
-
-/* Preset and follow-up chips */
-.st-key-presets button, .st-key-followups button{ background:#fff; border:1.5px solid var(--line); color:var(--ink); font-weight:600; }
-.st-key-presets button:hover, .st-key-followups button:hover{ border-color:var(--red); color:var(--red); }
-.st-key-followups{ margin-top:6px; }
-
-/* Result card with ring */
-.zw-result{ display:flex; align-items:center; gap:24px; flex-wrap:wrap; background:#fff; border-radius:28px; padding:18px 26px; box-shadow:var(--shadow); margin:2px 0 14px 0; }
-.zw-ring{ position:relative; width:110px; height:110px; border-radius:50%; flex:none; }
-.zw-ring-in{ position:absolute; inset:12px; border-radius:50%; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-.zw-ring-n{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.45rem; line-height:1; color:var(--ink); }
-.zw-ring-l{ font-size:0.68rem; color:var(--muted); margin-top:3px; }
-.zw-k{ color:var(--muted); font-size:0.82rem; margin-bottom:2px; }
-.zw-v{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:2.3rem; color:var(--ink); line-height:1.1; }
-.zw-v span{ font-size:1rem; font-weight:600; color:var(--muted); margin-left:4px; }
-.zw-pill{ display:inline-block; padding:5px 14px; border-radius:999px; font-weight:700; font-size:0.85rem; margin-top:8px; }
-.zw-pill.zw-late{ background:var(--amber-soft); color:var(--amber); }
-.zw-pill.zw-ok{ background:var(--green-soft); color:var(--green); }
-.zw-limit{ color:var(--muted); font-size:0.8rem; margin-left:8px; }
-
-/* Driver chips */
-.zw-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:4px 0 6px 0; }
-.zw-chip{ padding:6px 14px; border-radius:999px; font-size:0.86rem; font-weight:600; }
-.zw-chip.up{ background:var(--amber-soft); color:var(--amber); }
-.zw-chip.down{ background:var(--green-soft); color:var(--green); }
-
-
-/* Recommendations */
-.zw-rec{ background:#fff; border-radius:28px; padding:20px 24px 10px 24px; box-shadow:var(--shadow); margin:0 0 14px 0; border-left:8px solid var(--line); }
-.zw-rec-high{ border-left-color:var(--amber); } .zw-rec-watch{ border-left-color:#E9A23B; } .zw-rec-low{ border-left-color:var(--green); }
-.zw-rec-h{ font-family:'Sora','Manrope',sans-serif; font-weight:600; font-size:1.02rem; color:var(--ink); }
-.zw-rec-s{ color:var(--muted); font-size:0.9rem; margin:2px 0 12px 0; }
-.zw-act{ display:flex; gap:14px; align-items:flex-start; padding:10px 0; border-top:1px solid #F0EFF7; }
-.zw-act-ico{ width:40px; height:40px; border-radius:50%; background:var(--canvas); display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex:none; }
-.zw-act-t{ font-weight:700; font-size:0.96rem; color:var(--ink); }
-.zw-act-d{ color:var(--muted); font-size:0.88rem; margin-top:2px; line-height:1.45; }
-.zw-tag{ display:inline-block; margin-left:10px; padding:2px 10px; border-radius:999px; font-size:0.7rem; font-weight:700; vertical-align:middle; }
-.zw-tag.now{ background:var(--amber-soft); color:var(--amber); }
-.zw-tag.ok{ background:var(--green-soft); color:var(--green); }
-.zw-tag.maybe{ background:#ECEAF8; color:#5B5380; }
 
 /* Manual form groups */
 [class*="st-key-grp_"]{ background:#fff; border:none !important; border-radius:26px !important; box-shadow:var(--shadow); padding:6px 8px; }
@@ -740,7 +668,7 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--red) !important; 
 textarea:focus-visible, input:focus-visible{ outline:none !important; }
 
 .zw-foot{ text-align:center; color:var(--muted); font-size:0.78rem; margin-top:2.4rem; }
-@media (max-width:640px){ .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } .zw-result{ gap:16px; } }
+@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } }
 </style>
 """,
     unsafe_allow_html=True,
@@ -877,19 +805,16 @@ def render_recommendations(rec: dict) -> None:
 
 
 def render_tiles(minutes: float, prob_pct: float, is_late: bool) -> None:
-    color = "#C2410C" if is_late else "#12805C"
     cls = "zw-late" if is_late else "zw-ok"
     status = "Likely late" if is_late else "Likely on time"
-    pct = max(0.0, min(100.0, prob_pct))
     st.markdown(
-        '<div class="zw-result">'
-        f'<div class="zw-ring" style="background:conic-gradient({color} {pct:.1f}%, #ECEAF5 0)">'
-        f'<div class="zw-ring-in"><div class="zw-ring-n">{prob_pct:.0f}%</div>'
-        '<div class="zw-ring-l">late risk</div></div></div>'
-        '<div><div class="zw-k">Predicted delivery time</div>'
-        f'<div class="zw-v">{minutes:.0f}<span>min</span></div>'
-        f'<span class="zw-pill {cls}">{status}</span>'
-        f'<span class="zw-limit">limit {LATE_THRESHOLD} min</span></div>'
+        '<div class="zw-tiles">'
+        f'<div class="zw-tile"><div class="zw-k">Predicted delivery time</div>'
+        f'<div class="zw-v">{minutes:.0f}<span>min</span></div></div>'
+        f'<div class="zw-tile"><div class="zw-k">Chance of being late</div>'
+        f'<div class="zw-v">{prob_pct:.0f}<span>%</span></div></div>'
+        f'<div class="zw-tile {cls}"><div class="zw-k">Verdict (limit {LATE_THRESHOLD} min)</div>'
+        f'<div class="zw-v zw-status">{status}</div></div>'
         "</div>",
         unsafe_allow_html=True,
     )
@@ -932,27 +857,19 @@ st.markdown(
 if st.session_state.mode is None:
     st.markdown('<div class="zw-h">How would you like to enter the order?</div>', unsafe_allow_html=True)
     _feats = [
-        ("ai", "💬", "Describe it in words",
-         "Type or paste the order like a message. The AI assistant picks out the details and asks for anything missing.",
-         ["Fastest", "Uses AI"], "Start typing →"),
-        ("manual", "🧮", "Fill in the form",
-         "Pick areas, rider and conditions from simple dropdowns. Presets get you started in one tap.",
-         ["Full control", "No AI needed"], "Open the form →"),
+        ("ai", "💬", "Describe it in words", "Type the order like a message"),
+        ("manual", "🧮", "Fill in the form", "Dropdowns and quick presets"),
     ]
-    for _col, (_key, _ico, _title, _desc, _tags, _go) in zip(st.columns(2), _feats):
+    for _col, (_key, _ico, _title, _desc) in zip(st.columns(2), _feats):
         with _col:
             with st.container(key=f"feat_{_key}"):
                 st.markdown(
-                    f'<div class="zw-feat-ico">{_ico}</div><div class="zw-feat-t">{_title}</div>'
-                    f'<div class="zw-feat-d">{_desc}</div>'
-                    f'<div class="zw-feat-tags">{"".join(f"<span>{t}</span>" for t in _tags)}</div>'
-                    f'<div class="zw-feat-go">{_go}</div>',
+                    f'<div class="zw-feat"><div class="zw-feat-ico">{_ico}</div>'
+                    f'<div><div class="zw-feat-t">{_title}</div><div class="zw-feat-d">{_desc}</div></div></div>',
                     unsafe_allow_html=True,
                 )
                 st.button(f"Choose: {_title}", key=f"pickbig_{_key}", on_click=set_mode, args=(_key,))
     st.markdown(
-        '<div class="zw-steps"><span><b>1</b>Enter the order</span><span><b>2</b>See the delay prediction</span>'
-        '<span><b>3</b>Get recommended actions</span></div>'
         f'<div class="zw-note zw-center">An order counts as late when delivery takes more than {LATE_THRESHOLD} minutes.</div>',
         unsafe_allow_html=True,
     )
