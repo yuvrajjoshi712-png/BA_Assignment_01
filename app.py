@@ -573,7 +573,7 @@ def generate_followup(question: str, context: dict, history: List[Dict[str, str]
 st.markdown(
     """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap');
 :root{
   --ink:#0F172A; --muted:#64748B; --line:#E2E8F0; --canvas:#F6F7F9;
   --accent:#2563EB; --accent-dark:#1D4ED8; --accent-soft:#EFF4FF;
@@ -581,14 +581,19 @@ st.markdown(
 }
 .stApp{ background:var(--canvas); font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif; color:var(--ink); }
 header[data-testid="stHeader"]{ background:transparent; }
-.block-container{ max-width:820px; padding-top:4.5rem !important; padding-bottom:7rem; }
+.block-container{ max-width:820px; padding-top:5rem !important; padding-bottom:7rem; }
 #MainMenu, footer{ visibility:hidden; }
 
-/* Header */
-.zw-hero{ display:flex; gap:16px; align-items:center; padding-bottom:18px; margin-bottom:6px; border-bottom:1px solid var(--line); }
-.zw-logo{ width:46px; height:46px; border-radius:12px; background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.3rem; flex:none; }
-.zw-title{ font-weight:700; font-size:1.55rem; line-height:1.2; color:var(--ink); letter-spacing:-0.02em; }
-.zw-sub{ color:var(--muted); font-size:0.95rem; margin-top:3px; }
+/* Header banner (original design) */
+.zw-hero{ position:relative; overflow:hidden; display:flex; gap:18px; align-items:center;
+  padding:26px 30px; border-radius:36px; background:linear-gradient(120deg,#E23744 0%,#F25C3B 55%,#FF8A3D 100%); color:#fff; margin-bottom:1.6rem;
+  box-shadow:0 14px 34px rgba(226,55,68,.28); }
+.zw-hero::before{ content:""; position:absolute; right:-50px; top:-70px; width:230px; height:230px; border-radius:50%; background:rgba(255,255,255,.14); }
+.zw-hero::after{ content:""; position:absolute; right:110px; bottom:-80px; width:150px; height:150px; border-radius:50%; background:rgba(255,255,255,.10); }
+.zw-hero > *{ position:relative; z-index:1; }
+.zw-logo{ width:60px; height:60px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; font-size:30px; flex:none; box-shadow:0 6px 16px rgba(0,0,0,.15); }
+.zw-title{ font-family:'Sora','Manrope',sans-serif; font-weight:700; font-size:1.7rem; line-height:1.2; color:#fff; letter-spacing:-0.02em; }
+.zw-sub{ color:rgba(255,255,255,.9); font-size:0.97rem; margin-top:5px; }
 
 /* Headings and notes */
 .zw-h{ font-weight:600; font-size:1.02rem; color:var(--ink); margin:1.5rem 0 0.7rem 0; }
@@ -649,7 +654,7 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent) !importan
 textarea:focus-visible, input:focus-visible{ outline:none !important; }
 
 .zw-foot{ text-align:center; color:var(--muted); font-size:0.78rem; margin-top:2.4rem; }
-@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.3rem; } }
+@media (max-width:640px){ .zw-tiles{ grid-template-columns:1fr; } .zw-title{ font-size:1.35rem; } .zw-hero{ padding:20px; border-radius:28px; } }
 </style>
 """,
     unsafe_allow_html=True,
@@ -828,7 +833,7 @@ def show_ai_problem(headline: str, detail: Optional[str]) -> None:
 # HEADER + METHOD PICKER
 # =============================================================================
 st.markdown(
-    '<div class="zw-hero"><div class="zw-logo">Z</div><div>'
+    '<div class="zw-hero"><div class="zw-logo">🛵</div><div>'
     '<div class="zw-title">Zwigato Delivery Delay Predictor</div>'
     '<div class="zw-sub">Check whether an order is likely to arrive late, and what the manager can do about it.</div>'
     "</div></div>",
